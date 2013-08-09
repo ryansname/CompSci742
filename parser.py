@@ -1,6 +1,10 @@
 #! /usr/bin/env python3
+import multiprocessing
 import sys
 from datetime import datetime
+
+from concurrent.futures import ThreadPoolExecutor
+
 
 
 class Collector(object):
@@ -83,8 +87,15 @@ class Parser(object):
     def parse_all(self):
         for c in self.collectors:
             c.on_start(len(self.filenames))
-        for filename in sorted(self.filenames):
-            results = self.parse_file(filename)
+
+        executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
+
+        it = executor.map(self.parse_file, self.filenames)
+        # for filename in sorted(self.filenames):
+            # executor.submit(self.parse_file, filename)
+
+        for f in it:
+            pass
         for c in self.collectors:
             c.on_complete()
 
