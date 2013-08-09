@@ -95,18 +95,25 @@ class Parser(object):
         with open(filename) as f:
             for c in self.collectors:
                 c.on_file_start(filename)
+
+            timestamp_cache = {}
             for i, line in enumerate(f):
                 line = line.strip()
                 raw_parts = line.split()
                 raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                raw_request = " ".join(raw_parts[5:-2])[1:-1]
+                raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
+
+                timestamp = timestamp_cache.get(raw_timestamp, None)
+                if not timestamp:
+                    timestamp = datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z")
+                    timestamp_cache[raw_timestamp] = timestamp
                 # Names from http://en.wikipedia.org/wiki/Common_Log_Format
                 try:
                     parts = {
                         'ip': raw_parts[0],
                         'user-identifier': raw_parts[1],
                         'userid': raw_parts[2],
-                        'timestamp': datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z"),
+                        'timestamp': timestamp,
                         'raw_timestamp': raw_timestamp,
                         'request': {
                             'type': raw_request.split()[0],
