@@ -1,0 +1,103 @@
+#! /usr/bin/env python3
+import sys
+
+
+class Collector(object):
+    name = "BaseCollector"
+    display = True
+
+    def on_start(self, file_count):
+        pass
+
+    def on_file_start(self, filename):
+        pass
+
+    def on_access(self, data):
+        pass
+
+    def on_file_complete(self, filename):
+        pass
+
+    def on_complete(self):
+        pass
+
+    def report(self):
+        return ""
+
+
+class ProgressReporter(Collector):
+    display = False
+
+    def on_start(self, file_count):
+        self.count = 0
+        self.total = file_count
+
+    def on_file_start(self, filename):
+        self.count += 1
+        print('\rFile {}/{}'.format(self.count, self.total), end='')
+        sys.stdout.flush()
+
+    def on_complete(self):
+        print()
+
+
+class IpCollector(Collector):
+    name = "IP Count"
+
+    def __init__(self):
+        self.ips = set()
+
+    def on_access(self, data):
+        self.ips.add(data['ip'])
+
+    def report(self):
+        return str(len(self.ips))
+
+class Parser(object):
+
+    def __init__(self, filenames, human_readable=True):
+        self.filenames = filenames
+        self.collectors = []
+        if human_readable:
+            self.split = ', '
+        else:
+            self.split = ','
+
+    def add_collector(self, collector):
+        self.collectors.append(collector)
+
+    def parse_all(self):
+        for c in self.collectors:
+            c.on_start(len(self.filenames))
+        for filename in sorted(self.filenames):
+            results = self.parse_file(filename)
+        for c in self.collectors:
+            c.on_complete()
+
+        print(self.split.join([c.name for c in self.collectors if c.display]))
+        print(self.split.join([c.report() for c in self.collectors if c.display]))
+
+    def parse_file(self, filename):
+        with open(filename) as f:
+            for c in self.collectors:
+                c.on_file_start(filename)
+            for line in f:
+                line = line.strip()
+                raw_parts = line.split()
+                parts = {
+                    'ip': raw_parts[0],
+                }
+                for c in self.collectors:
+                    c.on_access(parts)
+        for c in self.collectors:
+            c.on_file_complete(filename)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Usage: python {} <filename> [<filename> ...]".format(sys.argv[0])) 
+
+    parser = Parser(sys.argv[1:])
+    parser.add_collector(IpCollector())
+    parser.add_collector(ProgressReporter())
+    parser.parse_all()
