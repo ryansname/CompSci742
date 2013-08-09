@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import sys
+from datetime import datetime
 
 
 class Collector(object):
@@ -84,8 +85,17 @@ class Parser(object):
             for line in f:
                 line = line.strip()
                 raw_parts = line.split()
+                raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
+                # Names from http://en.wikipedia.org/wiki/Common_Log_Format
                 parts = {
                     'ip': raw_parts[0],
+                    'user-identifier': raw_parts[1],
+                    'userid': raw_parts[2],
+                    'timestamp': datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z"),
+                    'raw_timestamp': raw_timestamp,
+                    'request': " ".join(raw_parts[5:-2])[1:-1],
+                    'status': raw_parts[-2],
+                    'size': raw_parts[-1],
                 }
                 for c in self.collectors:
                     c.on_access(parts)
