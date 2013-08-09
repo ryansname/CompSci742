@@ -129,7 +129,7 @@ class Parser(object):
                 except ValueError:
                     print("ValueError file: {}:{}".format(filename, i))
                 except IndexError as e:
-                    print("IndexError, {}".format(e))
+                    print("IndexError, {}:{}".format(filename, i))
         for c in self.collectors:
             c.on_file_complete(filename)
 
