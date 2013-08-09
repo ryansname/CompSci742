@@ -54,6 +54,19 @@ class IpCollector(Collector):
     def report(self):
         return str(len(self.ips))
 
+class RobotCounter(Collector):
+    name = "Robots"
+
+    def __init__(self):
+        self.count = 0
+
+    def on_access(self, data):
+        if data['request']['resource'] == "/robots.txt":
+            self.count += 1
+
+    def report(self):
+        return str(self.count)
+
 class Parser(object):
 
     def __init__(self, filenames, human_readable=True):
@@ -82,23 +95,32 @@ class Parser(object):
         with open(filename) as f:
             for c in self.collectors:
                 c.on_file_start(filename)
-            for line in f:
+            for i, line in enumerate(f):
                 line = line.strip()
                 raw_parts = line.split()
                 raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
+                raw_request = " ".join(raw_parts[5:-2])[1:-1]
                 # Names from http://en.wikipedia.org/wiki/Common_Log_Format
-                parts = {
-                    'ip': raw_parts[0],
-                    'user-identifier': raw_parts[1],
-                    'userid': raw_parts[2],
-                    'timestamp': datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z"),
-                    'raw_timestamp': raw_timestamp,
-                    'request': " ".join(raw_parts[5:-2])[1:-1],
-                    'status': raw_parts[-2],
-                    'size': raw_parts[-1],
-                }
-                for c in self.collectors:
-                    c.on_access(parts)
+                try:
+                    parts = {
+                        'ip': raw_parts[0],
+                        'user-identifier': raw_parts[1],
+                        'userid': raw_parts[2],
+                        'timestamp': datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z"),
+                        'raw_timestamp': raw_timestamp,
+                        'request': {
+                            'type': raw_request.split()[0],
+                            'protocol': raw_request.split()[-1],
+                            'resource': raw_request.split()[1:-1],
+                        },
+                        'raw_request': raw_request,
+                        'status': raw_parts[-2],
+                        'size': raw_parts[-1],
+                    }
+                    for c in self.collectors:
+                        c.on_access(parts)
+                except ValueError:
+                    print("ValueError file: {}:{}".format(filename, i))
         for c in self.collectors:
             c.on_file_complete(filename)
 
@@ -109,5 +131,6 @@ if __name__ == '__main__':
 
     parser = Parser(sys.argv[1:])
     parser.add_collector(IpCollector())
+    parser.add_collector(RobotCounter())
     parser.add_collector(ProgressReporter())
     parser.parse_all()
