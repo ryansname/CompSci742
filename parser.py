@@ -83,7 +83,7 @@ class Parser(object):
     def parse_all(self):
         for c in self.collectors:
             c.on_start(len(self.filenames))
-        for filename in sorted(self.filenames):
+        for filename in reversed(sorted(self.filenames)):
             results = self.parse_file(filename)
         for c in self.collectors:
             c.on_complete()
