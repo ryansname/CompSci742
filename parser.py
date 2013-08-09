@@ -111,7 +111,7 @@ class Parser(object):
                         'request': {
                             'type': raw_request.split()[0],
                             'protocol': raw_request.split()[-1],
-                            'resource': raw_request.split()[1:-1],
+                            'resource': raw_request.split()[1:-1][0],
                         },
                         'raw_request': raw_request,
                         'status': raw_parts[-2],
