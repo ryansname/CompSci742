@@ -118,7 +118,7 @@ class Parser(object):
                         'request': {
                             'type': raw_request[0],
                             'protocol': raw_request[-1],
-                            'resource': raw_request[1:-1][0],
+                            'resource': raw_request[1:-1][0] if len(raw_request[1:-1]) == 1 else "",
                         },
                         'raw_request': " ".join(raw_request),
                         'status': raw_parts[-2],
@@ -128,8 +128,6 @@ class Parser(object):
                         c.on_access(parts)
                 except ValueError:
                     print("ValueError file: {}:{}".format(filename, i))
-                except IndexError as e:
-                    print("IndexError, {}:{}".format(filename, i))
         for c in self.collectors:
             c.on_file_complete(filename)
 
