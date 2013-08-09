@@ -3,7 +3,7 @@ import multiprocessing
 import sys
 from datetime import datetime
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 
 
 
@@ -88,7 +88,7 @@ class Parser(object):
         for c in self.collectors:
             c.on_start(len(self.filenames))
 
-        executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
+        executor = ProcessPoolExecutor(max_workers=multiprocessing.cpu_count())
 
         it = executor.map(self.parse_file, self.filenames)
         # for filename in sorted(self.filenames):
