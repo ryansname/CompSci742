@@ -116,11 +116,11 @@ class Parser(object):
                         'timestamp': timestamp,
                         'raw_timestamp': raw_timestamp,
                         'request': {
-                            'type': raw_request.split()[0],
-                            'protocol': raw_request.split()[-1],
-                            'resource': raw_request.split()[1:-1][0],
+                            'type': raw_request[0],
+                            'protocol': raw_request[-1],
+                            'resource': raw_request[1:-1][0],
                         },
-                        'raw_request': raw_request,
+                        'raw_request': " ".join(raw_request),
                         'status': raw_parts[-2],
                         'size': raw_parts[-1],
                     }
@@ -128,6 +128,8 @@ class Parser(object):
                         c.on_access(parts)
                 except ValueError:
                     print("ValueError file: {}:{}".format(filename, i))
+                except IndexError as e:
+                    print("IndexError, {}".format(e))
         for c in self.collectors:
             c.on_file_complete(filename)
 
