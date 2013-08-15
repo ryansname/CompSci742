@@ -72,6 +72,25 @@ class SuccessCollector(Collector):
         return "{}".format(self.success_count / self.total)
 
 
+class MeanTransferCollector(Collector):
+    name = "Mean Transfer"
+
+    def __init__(self):
+        self.running_average = 0
+        self.total = 0
+
+    def on_access(self, data):
+        if data['size'] == '-':
+            size = 0
+        else:
+            size = int(data['size'])
+        self.running_average = ((self.running_average * self.total) + size) / (self.total + 1)
+        self.total += 1
+
+    def report(self):
+        return "{:.3f}kB".format(self.running_average / 1000)
+
+
 class Parser(object):
 
     def __init__(self, filenames, human_readable=True):
@@ -134,7 +153,8 @@ class Parser(object):
                     }
                     for c in self.collectors:
                         c.on_access(parts)
-                except ValueError:
+                except ValueError as e:
+                    print(e)
                     print("Error file: {}:{}".format(filename, i))
         for c in self.collectors:
             c.on_file_complete(filename)
@@ -147,5 +167,6 @@ if __name__ == '__main__':
     parser = Parser(sys.argv[1:])
     parser.add_collector(IpCollector())
     parser.add_collector(SuccessCollector())
+    parser.add_collector(MeanTransferCollector())
     parser.add_collector(ProgressReporter())
     parser.parse_all()
