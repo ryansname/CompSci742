@@ -54,18 +54,23 @@ class IpCollector(Collector):
     def report(self):
         return str(len(self.ips))
 
-class RobotCounter(Collector):
-    name = "Robots"
+
+class SuccessCollector(Collector):
+    name = "%Success"
 
     def __init__(self):
-        self.count = 0
+        self.success_count = 0
+        self.total = 0
 
     def on_access(self, data):
-        if data['request']['resource'] == "/robots.txt":
-            self.count += 1
+        status_digit = int(data['status'][0])
+        if status_digit == 2 or status_digit == 3:
+            self.success_count += 1
+        self.total += 1
 
     def report(self):
-        return str(self.count)
+        return "{}".format(self.success_count / self.total)
+
 
 class Parser(object):
 
@@ -101,8 +106,11 @@ class Parser(object):
                 line = line.strip()
                 raw_parts = line.split()
                 try:
-                    raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                    raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
+                    try:
+                        raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
+                        raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
+                    except IndexError:
+                        continue
 
                     timestamp = timestamp_cache.get(raw_timestamp, None)
                     if not timestamp:
@@ -126,7 +134,7 @@ class Parser(object):
                     }
                     for c in self.collectors:
                         c.on_access(parts)
-                except:
+                except ValueError:
                     print("Error file: {}:{}".format(filename, i))
         for c in self.collectors:
             c.on_file_complete(filename)
@@ -138,6 +146,6 @@ if __name__ == '__main__':
 
     parser = Parser(sys.argv[1:])
     parser.add_collector(IpCollector())
-    parser.add_collector(RobotCounter())
+    parser.add_collector(SuccessCollector())
     parser.add_collector(ProgressReporter())
     parser.parse_all()
