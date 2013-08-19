@@ -140,7 +140,7 @@ class ReferenceConcentrationCollector(Collector):
             bottom_line.append(str(count))
 
         print()
-        print(name)
+        print(self.name)
         print()
         print(separator.join(top_line))
         print(separator.join(bottom_line))
