@@ -154,7 +154,7 @@ class Parser(object):
         if human_readable:
             self.split = ', '
         else:
-            self.split = ','
+            self.split = ' '
 
     def add_collector(self, collector):
         self.collectors.append(collector)
@@ -222,7 +222,13 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Usage: python {} <filename> [<filename> ...]".format(sys.argv[0])) 
 
-    parser = Parser(sys.argv[1:])
+    human_readable = True
+
+    index = 1
+    if sys.argv[index] == '-g':
+        human_readable = False
+        index += 1
+    parser = Parser(sys.argv[index:], human_readable=human_readable)
     parser.add_collector(IpCollector())
     parser.add_collector(SuccessCollector())
     parser.add_collector(MeanTransferCollector())
