@@ -25,6 +25,9 @@ class Collector(object):
     def report(self):
         return ""
 
+    def print_graph_data(self, separator):
+        return ""
+
 
 class ProgressReporter(Collector):
     display = False
@@ -90,8 +93,9 @@ class MeanTransferCollector(Collector):
     def report(self):
         return "{:.3f}kB".format(self.running_average / 1000)
 
-class OneTimeReferenceCollector(Collector):
-    name = "One Time Referencing"
+
+class FileCollector(Collector):
+    name = "Files"
 
     def __init__(self):
         self.files = {}
@@ -102,8 +106,45 @@ class OneTimeReferenceCollector(Collector):
             self.files[file] = 0
         self.files[file] += 1
 
+
+class OneTimeReferenceCollector(Collector):
+    name = "One Time Referencing"
+
+    def __init__(self):
+        self.fileCollector = FileCollector()
+
+    def on_access(self, data):
+        self.fileCollector.on_access(data)
+
     def report(self):
-        return "{:.2f}%".format(len([x for x in self.files if self.files[x] == 1]) / len(self.files) * 100)
+        files = self.fileCollector.files
+        return "{:.2f}%".format(len([x for x in files if files[x] == 1]) / len(files) * 100)
+
+
+class ReferenceConcentrationCollector(Collector):
+    name = "Concentration of References"
+    display = False
+
+    def __init__(self):
+        self.fileCollector = FileCollector()
+
+    def on_access(self, data):
+        self.fileCollector.on_access(data)
+
+    def print_graph_data(self, separator):
+        files = self.fileCollector.files
+        top_line = ["Document Rank"]
+        bottom_line = ["Accesses to document"]
+        for file, count in sorted(files.items(), key=lambda x: -x[1]):  # -x[0] to make sorted return largest to smallest
+            top_line.append(file)
+            bottom_line.append(str(count))
+
+        print()
+        print(name)
+        print()
+        print(separator.join(top_line))
+        print(separator.join(bottom_line))
+
 
 class Parser(object):
 
@@ -128,6 +169,9 @@ class Parser(object):
 
         print(self.split.join([c.name for c in self.collectors if c.display]))
         print(self.split.join([c.report() for c in self.collectors if c.display]))
+
+        for c in self.collectors:
+            c.print_graph_data(self.split)
 
     def parse_file(self, filename):
         with open(filename, errors='ignore') as f:
@@ -184,4 +228,5 @@ if __name__ == '__main__':
     parser.add_collector(MeanTransferCollector())
     parser.add_collector(ProgressReporter())
     parser.add_collector(OneTimeReferenceCollector())
+    parser.add_collector(ReferenceConcentrationCollector())
     parser.parse_all()
