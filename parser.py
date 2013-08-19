@@ -90,6 +90,20 @@ class MeanTransferCollector(Collector):
     def report(self):
         return "{:.3f}kB".format(self.running_average / 1000)
 
+class OneTimeReferenceCollector(Collector):
+    name = "One Time Referencing"
+
+    def __init__(self):
+        self.files = {}
+
+    def on_access(self, data):
+        file = data['request']['resource']
+        if file not in self.files:
+            self.files[file] = 0
+        self.files[file] += 1
+
+    def report(self):
+        return "{:.2f}%".format(len([x for x in self.files if self.files[x] == 1]) / len(self.files) * 100)
 
 class Parser(object):
 
@@ -169,4 +183,5 @@ if __name__ == '__main__':
     parser.add_collector(SuccessCollector())
     parser.add_collector(MeanTransferCollector())
     parser.add_collector(ProgressReporter())
+    parser.add_collector(OneTimeReferenceCollector())
     parser.parse_all()
