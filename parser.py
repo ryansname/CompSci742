@@ -38,11 +38,11 @@ class ProgressReporter(Collector):
 
     def on_file_start(self, filename):
         self.count += 1
-        print('\rFile {}/{}'.format(self.count, self.total), end='')
+        print('\rFile {}/{}'.format(self.count, self.total), end='', file=sys.stderr)
         sys.stdout.flush()
 
     def on_complete(self):
-        print()
+        print(file=sys.stderr)
 
 
 class IpCollector(Collector):
@@ -212,15 +212,15 @@ class Parser(object):
                     for c in self.collectors:
                         c.on_access(parts)
                 except ValueError as e:
-                    print(e)
-                    print("Error file: {}:{}".format(filename, i))
+                    print(e, file=sys.stderr)
+                    print("Error file: {}:{}".format(filename, i), file=sys.stderr)
         for c in self.collectors:
             c.on_file_complete(filename)
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python {} <filename> [<filename> ...]".format(sys.argv[0])) 
+        print("Usage: python [-g] {} <filename> [<filename> ...]".format(sys.argv[0]), file=sys.stderr) 
 
     human_readable = True
 
