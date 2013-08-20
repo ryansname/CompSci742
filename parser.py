@@ -133,17 +133,13 @@ class ReferenceConcentrationCollector(Collector):
 
     def print_graph_data(self, separator):
         files = self.fileCollector.files
-        top_line = ["Document Rank"]
-        bottom_line = ["Accesses to document"]
-        for file, count in sorted(files.items(), key=lambda x: -x[1]):  # -x[0] to make sorted return largest to smallest
-            top_line.append(file)
-            bottom_line.append(str(count))
-
+        headers = ("Document Rank", "Accesses to document")
         print()
         print(self.name)
         print()
-        print(separator.join(top_line))
-        print(separator.join(bottom_line))
+        print(separator.join(headers))
+        for file, count in sorted(files.items(), key=lambda x: -x[1]):  # -x[0] to make sorted return largest to smallest
+            print(separator.join((file, str(count))))
 
 
 class Parser(object):
