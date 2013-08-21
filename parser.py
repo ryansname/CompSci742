@@ -162,7 +162,7 @@ class AccessTimeCollector(Collector):
         print(self.name)
         print()
         for band, count in self.bands.items():
-            print(separator.join((band, count)))
+            print(separator.join((str(band), str(count))))
 
 
 class Parser(object):
