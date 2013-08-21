@@ -142,6 +142,29 @@ class ReferenceConcentrationCollector(Collector):
             print(separator.join((file, str(count))))
 
 
+class AccessTimeCollector(Collector):
+    name = "Access Time"
+    display = False
+
+    def __init__(self):
+        self.bands = {}
+        for hour in range(24 * 7):
+            self.bands[hour] = 0
+
+    def on_access(self, data):
+        weekday = data['timestamp'].isoweekday() - 1
+        
+        band = weekday * 24 + data['timestamp'].hour
+        self.bands[band] += 1
+
+    def print_graph_data(self, separator):
+        print()
+        print(self.name)
+        print()
+        for band, count in self.bands.items():
+            print(separator.join((band, count)))
+
+
 class Parser(object):
 
     def __init__(self, filenames, human_readable=True):
@@ -231,4 +254,5 @@ if __name__ == '__main__':
     parser.add_collector(ProgressReporter())
     parser.add_collector(OneTimeReferenceCollector())
     parser.add_collector(ReferenceConcentrationCollector())
+    parser.add_collector(AccessTimeCollector())
     parser.parse_all()
