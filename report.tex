@@ -41,6 +41,13 @@ Auckland, New Zealand\\
 \section{Introduction}
 
 \section{Related Work}
+There have been several studies investigating the characteristics of Web workloads. These studies can be useful in understanding the evolution of Web traffic under conditions we did not measure. In order to improve the scalability and performance of the Internet, we must have a complete understanding of the different traffic flows it may have to withstand. We have summarised several previous studies to provide an overview of these traffic flows. 
+
+Arlitt and Jin \cite{world_cup} analysed data from the 1994 World Cup website. This study was motivated by the high volume of users accessing the site, and therefore the potential to extrapolate the future characteristics of web traffic. They discovered that most users are interested in cacheable files and thus caching plays an important role in the scalability and performance of the Internet. They also found that most user sessions had only one request per session, and therefore managing how connections are closed may be improved by examining session properties.
+
+In 2007, Gill et al. \cite{youtube} analysed YouTube usage on the University of Calgary network and collected statistics on global video popularity. The aim of this study was to investigate Web 2.0 workload characteristics to allow for improvements in network management, capacity planning and the design of new systems. Web 2.0 marks a shift towards user generated content and with it comes a plethora of metadata. It was found that although the concentration of references was reduced from that of traditional Web workloads \cite{keynote}, metadata should be used to improve the effectiveness of caching.
+
+
 
 \section{Methodology}
 
@@ -50,4 +57,6 @@ Auckland, New Zealand\\
 
 \section{Conclusions and Future Work}
 
+\bibliographystyle{IEEEtran}
+\bibliography{references.bib}
 \end{document}
