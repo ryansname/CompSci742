@@ -6,30 +6,8 @@
 \usepackage{mdwlist}
 
 \title{Title}
-\author{\IEEEauthorblockN{Chelsea Farley}
-\IEEEauthorblockA{The University of Auckland\\
-Auckland, New Zealand\\
-cfar030@aucklanduni.ac.nz}
-\and
-\IEEEauthorblockN{Ryan Lewis}
-\IEEEauthorblockA{The University of Auckland\\
-Auckland, New Zealand\\
-rlew036@aucklanduni.ac.nz}
-\and
-\IEEEauthorblockN{David Armstrong}
-\IEEEauthorblockA{The University of Auckland\\
-Auckland, New Zealand\\
-darm230@aucklanduni.ac.nz}
-\and
-\IEEEauthorblockN{Rina Gao}
-\IEEEauthorblockA{The University of Auckland\\
-Auckland, New Zealand\\
-rina.gao@auckland.ac.nz}
-\and
-\IEEEauthorblockN{Ryunosuke Madenokoji}
-\IEEEauthorblockA{The University of Auckland\\
-Auckland, New Zealand\\
- rmad019@aucklanduni.ac.nz}}
+\author{\IEEEauthorblockN{Chelsea Farley, Ryan Lewis, David Armstron, Rina Gao and Ryunosuke Madenokoji}
+\IEEEauthorblockA{The University of Auckland}}
 \date{Today}
 
 \begin{document}
@@ -45,9 +23,11 @@ There have been several studies investigating the characteristics of Web workloa
 
 Arlitt and Jin \cite{world_cup} analysed data from the 1994 World Cup website. This study was motivated by the high volume of users accessing the site, and therefore the potential to extrapolate the future characteristics of web traffic. They discovered that most users are interested in cacheable files and thus caching plays an important role in the scalability and performance of the Internet. They also found that most user sessions had only one request per session, and therefore managing how connections are closed may be improved by examining session properties.
 
+In 1997, Arlitt and Williamson \cite{keynote} analysed logs from six Web servers and presented their findings. The motivation of their study was to find invariants of Web workload characteristics across all six server logs. These invariants would be useful in the development of techniques for improving caching and the general performance of the Web. They found 10 invariants which may be useful in future analyses of Web traffic. They also discovered that there is the opportunity for caching to improve performance, and more specifically that caching to reduce the number of requests may be more effective than caching to reduce bytes transferred.
+
+Williams et al. \cite{williams05} produced an analysis of Web server logs from 2004 from the same three universities as the initial paper \cite{keynote}. The aim of the analysis was to uncover the impact of Moore's law on the ten invariants of the initial study. They concluded that despite the increase in traffic volume, most of the ten invariants remained unchanged. However, the percentage of successful requests and the percentage of HTML and image files transferred had decreased. 
+
 In 2007, Gill et al. \cite{youtube} analysed YouTube usage on the University of Calgary network and collected statistics on global video popularity. The aim of this study was to investigate Web 2.0 workload characteristics to allow for improvements in network management, capacity planning and the design of new systems. Web 2.0 marks a shift towards user generated content and with it comes a plethora of metadata. It was found that although the concentration of references was reduced from that of traditional Web workloads \cite{keynote}, metadata should be used to improve the effectiveness of caching.
-
-
 
 \section{Methodology}
 
