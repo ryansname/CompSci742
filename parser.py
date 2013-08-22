@@ -46,7 +46,7 @@ class ProgressReporter(Collector):
 
 
 class IpCollector(Collector):
-    name = "IP Count"
+    name = "IP_Count"
 
     def __init__(self):
         self.ips = set()
@@ -76,7 +76,7 @@ class SuccessCollector(Collector):
 
 
 class MeanTransferCollector(Collector):
-    name = "Mean Transfer"
+    name = "Mean_Transfer"
 
     def __init__(self):
         self.running_average = 0
@@ -108,7 +108,7 @@ class FileCollector(Collector):
 
 
 class OneTimeReferenceCollector(Collector):
-    name = "One Time Referencing"
+    name = "One_Time_Referencing"
 
     def __init__(self):
         self.fileCollector = FileCollector()
@@ -122,7 +122,7 @@ class OneTimeReferenceCollector(Collector):
 
 
 class ReferenceConcentrationCollector(Collector):
-    name = "Concentration of References"
+    name = "Concentration_of_References"
     display = False
 
     def __init__(self):
@@ -143,7 +143,7 @@ class ReferenceConcentrationCollector(Collector):
 
 
 class AccessTimeCollector(Collector):
-    name = "Access Time"
+    name = "Access_Time"
     display = False
 
     def __init__(self):
@@ -163,6 +163,61 @@ class AccessTimeCollector(Collector):
         print()
         for band, count in self.bands.items():
             print(separator.join((str(band), str(count))))
+
+
+class CacheCollector(Collector):
+    name = "Cache_Hit_Rate"
+
+    def __init__(self):
+        self.total = 0
+        self.hits = 0
+
+    def on_access(self, data):
+        if data['status'] == "304":
+            self.hits += 1
+        self.total += 1
+
+    def report(self):
+        return "{}".format(self.hits / self.total)
+
+
+class CachedBytes(Collector):
+    name = "Cache_Bytes_Saved"
+
+    def __init__(self):
+        self.total = 0
+        self.sizes = {}
+        self.saved = 0
+
+    def on_access(self, data):
+        size = 0
+        if data['status'] == "304":
+            if data['request']['resource'] in self.sizes:
+                size = self.sizes[data['request']['resource']]
+                self.saved += self.sizes[data['request']['resource']]
+            else:
+                return
+        elif data['status'] == "200" and data['size'] != '-':
+            size = int(data['size'])
+            self.sizes[data['request']['resource']] = size
+        self.total += size
+
+    def report(self):
+        return "{}".format(self.saved)
+
+
+class TotalTransferCollector(Collector):
+    name = "Total_Transferred_Size"
+
+    def __init__(self):
+        self.total = 0
+
+    def on_access(self, data):
+        if data['size'] != '-':
+            self.total += int(data['size'])
+
+    def report(self):
+        return "{}".format(self.total)
 
 
 class Parser(object):
@@ -253,6 +308,9 @@ if __name__ == '__main__':
     parser.add_collector(MeanTransferCollector())
     parser.add_collector(ProgressReporter())
     parser.add_collector(OneTimeReferenceCollector())
+    parser.add_collector(CacheCollector())
+    parser.add_collector(CachedBytes())
+    parser.add_collector(TotalTransferCollector())
     parser.add_collector(ReferenceConcentrationCollector())
     parser.add_collector(AccessTimeCollector())
     parser.parse_all()
