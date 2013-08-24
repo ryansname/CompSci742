@@ -49,6 +49,9 @@ Almeida et al. \cite{reference_locality} examined models for gathering data on s
 
 \section{Methodology}\label{methodology}
 \subsection{Characteristics}\label{lab:characteristics}
+In this study, we have chosen to examine five of the characteristics from Arlitt and Williamson's initial search\cite{needed} for ten web server workload invariants: the success rate, file types, mean transfer, one time referencing, and the concentration of references. We also look into two of the invariants found by Gupta and Viecco\cite{needed}: weekday versus weekend usage and diurnal usage. Finally, we add two original invariants: cache rate, and the effectiveness of caching.
+
+The success rate looks at the occurrence of each success code in the log: successful, found, not modified and unsuccessful, and file types refer to the frequency of requests on files of each type. Mean transfer is the mean number of bytes transferred in an individual request. One time referencing looks at the percentage of files and bytes that are requested only once in the logged period, while the concentration of references is a measurement of the frequency of distinct file accesses. We compare the usage of these sites between weekdays and weekends, and also between daytime and nighttime. Cache rate looks at the ratio of number of accesses of a file, and the number of times it was cached, while the effectiveness of caching refers to the amount of bandwidth saved with caching.
 \subsection{Metrics}
 To determine which characteristics from section \ref{lab:characteristics} were present we decided on the following metrics:
 \begin{itemize}[noitemsep]
