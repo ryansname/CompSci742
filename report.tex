@@ -1,9 +1,9 @@
 \documentclass[10pt,conference]{IEEEtran}
 
+\usepackage{enumitem}
 \usepackage{graphics}
 \usepackage{cite}
 \usepackage{url}
-\usepackage{mdwlist}
 
 \title{Title}
 \author{\IEEEauthorblockN{Chelsea Farley, Ryan Lewis, David Armstrong, Rina Gao and Ryunosuke Madenokoji}
@@ -48,8 +48,21 @@ Almeida et al. \cite{almeida} analysed the performance of a PC acting as dedicat
 Almeida et al. \cite{reference_locality} examined models for gathering data on spatial and temporal locality. The motivation of this study was the insufficiency of simple popularity based models being insufficient for capturing spatial and temporal locality. They discovered that for accesses following a temporal access pattern, caching is beneficial in improving performance. Whereas, for accesses following a spatial access pattern, prefetching is beneficial in improving performance.
 
 \section{Methodology}\label{methodology}
-\subsection{Characteristics}
+\subsection{Characteristics}\label{lab:characteristics}
 \subsection{Metrics}
+To determine which characteristics from section \ref{lab:characteristics} were present we decided on the following metrics:
+\begin{itemize}[noitemsep]
+    \item IpCollector
+    \item SuccessCollector
+    \item MeanTransferCollector
+    \item ProgressReporter
+    \item OneTimeReferenceCollector
+    \item CacheCollector
+    \item CachedBytes
+    \item TotalTransferCollector
+    \item ReferenceConcentrationCollector
+    \item AccessTimeCollector
+\end{itemize}
 \subsection{Tools}
 
 \section{Results}\label{results}

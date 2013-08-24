@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+import re
 import sys
 from datetime import datetime
 
@@ -253,14 +254,39 @@ class Parser(object):
                 c.on_file_start(filename)
 
             timestamp_cache = {}
+            groups = {
+                'ip': 1,
+                'user-identifier': 2,
+                'userid': 3,
+                'timestamp': 4,
+                'request': 5,
+                'status': 6,
+                'size': 7
+            }
             for i, line in enumerate(f):
                 line = line.strip()
-                raw_parts = line.split()
+                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
+                if not raw_parts:
+                    print("{}: Unable to parse request: {}".format(i, line))
                 try:
+                    request = {}
                     try:
-                        raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                        raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
+                        # raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
+                        raw_timestamp = raw_parts.group(groups['timestamp'])
+                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', raw_parts.group(groups['request']))
+                        if request_matches:
+                            raw_request = request_matches.group(0)
+                            request.update({
+                                'type': request_matches.group(1),
+                                'resource': request_matches.group(2),
+                                'protocol': request_matches.group(3)
+                            })
+                        else:
+                            print("No request found, skipping: {}".format(line), file=sys.stderr)
+                            continue
+                            
                     except IndexError:
+                        print("IndexError :(", file=sys.stderr)
                         continue
 
                     timestamp = timestamp_cache.get(raw_timestamp, None)
@@ -269,19 +295,15 @@ class Parser(object):
                         timestamp_cache[raw_timestamp] = timestamp
                     # Names from http://en.wikipedia.org/wiki/Common_Log_Format
                     parts = {
-                        'ip': raw_parts[0],
-                        'user-identifier': raw_parts[1],
-                        'userid': raw_parts[2],
+                        'ip': raw_parts.group(groups['ip']),
+                        'user-identifier': raw_parts.group(groups['user-identifier']),
+                        'userid': raw_parts.group(groups['userid']),
                         'timestamp': timestamp,
                         'raw_timestamp': raw_timestamp,
-                        'request': {
-                            'type': raw_request[0],
-                            'protocol': raw_request[-1],
-                            'resource': raw_request[1:-1][0] if len(raw_request[1:-1]) == 1 else "",
-                        },
-                        'raw_request': " ".join(raw_request),
-                        'status': raw_parts[-2],
-                        'size': raw_parts[-1],
+                        'request': request,
+                        'raw_request': raw_parts.group(groups['request']),
+                        'status': raw_parts.group(groups['status']),
+                        'size': raw_parts.group(groups['size']),
                     }
                     for c in self.collectors:
                         c.on_access(parts)
