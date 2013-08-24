@@ -271,7 +271,7 @@ class Parser(object):
                                 'protocol': request_matches.group(3)
                             })
                         else:
-                            print("No request found, skipping: {}".format(line))
+                            print("No request found, skipping: {}".format(line), file=sys.stderr)
                             continue
                             
                     except IndexError:
