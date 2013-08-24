@@ -268,11 +268,10 @@ class Parser(object):
                 raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
                 if not raw_parts:
                     print("{}: Unable to parse request: {}".format(i, line))
+                    continue
                 try:
                     request = {}
                     try:
-                        # raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                        raw_timestamp = raw_parts.group(groups['timestamp'])
                         request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', raw_parts.group(groups['request']))
                         if request_matches:
                             raw_request = request_matches.group(0)
@@ -289,6 +288,7 @@ class Parser(object):
                         print("IndexError :(", file=sys.stderr)
                         continue
 
+                    raw_timestamp = raw_parts.group(groups['timestamp'])
                     timestamp = timestamp_cache.get(raw_timestamp, None)
                     if not timestamp:
                         timestamp = datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z")
