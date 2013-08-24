@@ -254,15 +254,26 @@ class Parser(object):
                 c.on_file_start(filename)
 
             timestamp_cache = {}
+            groups = {
+                'ip': 1,
+                'user-identifier': 2,
+                'userid': 3,
+                'timestamp': 4,
+                'request': 5,
+                'status': 6,
+                'size': 7
+            }
             for i, line in enumerate(f):
                 line = line.strip()
-                raw_parts = line.split()
+                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
+                if not raw_parts:
+                    print("{}: Unable to parse request: {}".format(i, line))
                 try:
                     request = {}
                     try:
-                        raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                        raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
-                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', " ".join(raw_parts[5:-2]))
+                        # raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
+                        raw_timestamp = raw_parts.group(groups['timestamp'])
+                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', raw_parts.group(groups['request']))
                         if request_matches:
                             raw_request = request_matches.group(0)
                             request.update({
@@ -284,15 +295,15 @@ class Parser(object):
                         timestamp_cache[raw_timestamp] = timestamp
                     # Names from http://en.wikipedia.org/wiki/Common_Log_Format
                     parts = {
-                        'ip': raw_parts[0],
-                        'user-identifier': raw_parts[1],
-                        'userid': raw_parts[2],
+                        'ip': raw_parts.group(groups['ip']),
+                        'user-identifier': raw_parts.group(groups['user-identifier']),
+                        'userid': raw_parts.group(groups['userid']),
                         'timestamp': timestamp,
                         'raw_timestamp': raw_timestamp,
                         'request': request,
-                        'raw_request': " ".join(raw_request),
-                        'status': raw_parts[-2],
-                        'size': raw_parts[-1],
+                        'raw_request': raw_parts.group(groups['request']),
+                        'status': raw_parts.group(groups['status']),
+                        'size': raw_parts.group(groups['size']),
                     }
                     for c in self.collectors:
                         c.on_access(parts)
