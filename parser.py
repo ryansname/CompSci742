@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+import re
 import sys
 from datetime import datetime
 
@@ -257,10 +258,24 @@ class Parser(object):
                 line = line.strip()
                 raw_parts = line.split()
                 try:
+                    request = {}
                     try:
                         raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
                         raw_request = " ".join(raw_parts[5:-2])[1:-1].split()
+                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', " ".join(raw_parts[5:-2]))
+                        if request_matches:
+                            raw_request = request_matches.group(0)
+                            request.update({
+                                'type': request_matches.group(1),
+                                'resource': request_matches.group(2),
+                                'protocol': request_matches.group(3)
+                            })
+                        else:
+                            print("No request found, skipping: {}".format(line))
+                            continue
+                            
                     except IndexError:
+                        print("IndexError :(", file=sys.stderr)
                         continue
 
                     timestamp = timestamp_cache.get(raw_timestamp, None)
@@ -274,11 +289,7 @@ class Parser(object):
                         'userid': raw_parts[2],
                         'timestamp': timestamp,
                         'raw_timestamp': raw_timestamp,
-                        'request': {
-                            'type': raw_request[0],
-                            'protocol': raw_request[-1],
-                            'resource': raw_request[1:-1][0] if len(raw_request[1:-1]) == 1 else "",
-                        },
+                        'request': request,
                         'raw_request': " ".join(raw_request),
                         'status': raw_parts[-2],
                         'size': raw_parts[-1],
