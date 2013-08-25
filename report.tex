@@ -56,14 +56,29 @@ The success rate looks at the occurrence of each success code in the log: succes
 To determine which characteristics from section \ref{lab:characteristics} were present we decided on the following metrics:
 \begin{itemize}[noitemsep]
     \item Unique IP addresses
-    \item Number of Successful Requests
-    \item Mean number of bytes transferred
-    \item Number of times each file is accessed
     \item Number of times each status code appears
+    \item Number of times each file is accessed
+    \item Mean number of bytes transferred
     \item Number of bytes saved via caching
     \item Number of bytes transferred
     \item The time each file is requested
 \end{itemize}
+
+\subsection{Unique IP Addresses}
+Unique IP addresses is a count of how many unique IP addressess accessed each site. This metric allowed us to give an estimate of how many people were accessing the website. 
+
+\subsection{Number of times each status code appears}
+We recorded a count of each status code or range of status codes so that we could characterise both success rate and caching.
+
+The number of successful requests is the total number of requests that had the status code of either 2xx (Success) or 3xx (Redirection). This allows us to characterise the workloads based on percentage of successful requests.
+
+We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterize the effectiveness of caching on number of requests.
+
+\subsection{Number of times each file is accessed}
+This metric is a count of each access to a particular resource.
+
+This measurements of this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only a single time.
+
 \subsection{Tools}
 
 \section{Results}\label{results}

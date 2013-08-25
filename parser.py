@@ -95,17 +95,48 @@ class MeanTransferCollector(Collector):
         return "{:.3f}kB".format(self.running_average / 1000)
 
 
+class MedianTransferCollector(Collector):
+    name = "Median_Transfer"
+
+    def __init__(self):
+        self.transfers = []
+
+    def on_access(self, data):
+        if data['size'] == '-':
+            size = 0
+        else:
+            size = int(data['size'])
+        self.transfers.append(size)
+
+    def report(self):
+        def median(sizes):
+            sortd = sorted(sizes)
+            length = len(sortd)
+            if not length % 2:
+                return (sortd[length // 2] + sortd[length // 2 - 1]) / 2
+            return sortd[length // 2]
+        return "{}kB".format(median(self.transfers))
+
+
 class FileCollector(Collector):
     name = "Files"
 
     def __init__(self):
         self.files = {}
+        self.filesize = {}
 
     def on_access(self, data):
         file = data['request']['resource']
         if file not in self.files:
             self.files[file] = 0
+            self.filesize[file] = 0
         self.files[file] += 1
+        if data['size'] == '-':
+            size = 0
+        else:
+            size = int(data['size'])
+        if self.filesize[file] < size:
+            self.filesize[file] = size
 
 
 class OneTimeReferenceCollector(Collector):
@@ -328,6 +359,7 @@ if __name__ == '__main__':
     parser.add_collector(IpCollector())
     parser.add_collector(SuccessCollector())
     parser.add_collector(MeanTransferCollector())
+    parser.add_collector(MedianTransferCollector())
     parser.add_collector(ProgressReporter())
     parser.add_collector(OneTimeReferenceCollector())
     parser.add_collector(CacheCollector())
