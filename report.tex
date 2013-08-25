@@ -58,7 +58,6 @@ To determine which characteristics from section \ref{lab:characteristics} were p
     \item Unique IP addresses
     \item Number of times each status code appears
     \item Number of times each file is accessed
-    \item Mean number of bytes transferred
     \item Number of bytes saved via caching
     \item Number of bytes transferred
     \item The time each file is requested
@@ -78,6 +77,10 @@ We also were able to see how many requests were cached by the client based on th
 This metric is a count of each access to a particular resource.
 
 This measurements of this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only a single time.
+
+\subsection{Number of bytes transferred}
+This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request.
+
 
 \subsection{Tools}
 

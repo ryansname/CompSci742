@@ -165,13 +165,14 @@ class ReferenceConcentrationCollector(Collector):
 
     def print_graph_data(self, separator):
         files = self.fileCollector.files
-        headers = ("Document Rank", "Accesses to document")
+        filesizes = self.fileCollector.filesize
+        headers = ("Document Rank", "Accesses to document", "Document filesize")
         print()
         print(self.name)
         print()
         print(separator.join(headers))
         for file, count in sorted(files.items(), key=lambda x: -x[1]):  # -x[0] to make sorted return largest to smallest
-            print(separator.join((file, str(count))))
+            print(separator.join((file, str(count), str(filesizes[file]))))
 
 
 class AccessTimeCollector(Collector):
