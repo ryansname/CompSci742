@@ -297,19 +297,19 @@ class Parser(object):
             }
             for i, line in enumerate(f):
                 line = line.strip()
-                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
+                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)?\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
                 if not raw_parts:
                     print("{}: Unable to parse request: {}".format(i, line), file=sys.stderr)
                     continue
                 try:
                     request = {}
                     try:
-                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', raw_parts.group(groups['request']))
+                        request_matches = re.match(r'"([A-Z]+)\s+(.*?)(?:"|\s+(.*)")', raw_parts.group(groups['request']))
                         if request_matches:
                             raw_request = request_matches.group(0)
                             request.update({
                                 'type': request_matches.group(1),
-                                'resource': request_matches.group(2),
+                                'resource': request_matches.group(2).replace(" ", "_"),
                                 'protocol': request_matches.group(3)
                             })
                         else:

@@ -75,12 +75,17 @@ We also were able to see how many requests were cached by the client based on th
 
 \subsection{Number of times each file is accessed}
 This metric is a count of each access to a particular resource.
-
 This measurements of this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only a single time.
 
 \subsection{Number of bytes transferred}
-This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request.
+This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request. 
+It also allowed us to calculate the bandwidth savings from client side caching by combining this metric with the status codes collected.
 
+\subsection{Number of bytes transferred}
+This metric simply totalled up the total bandwidth used over the logging period. It allowed us to see the relative effect of caching when comparing the two datasets of different sizes.
+
+\subsection{The time each file is accessed}
+We also recorded the time of each file access binned into hourly bins. This metric allowed us to plot the number of accesses over time to see if the workload is still following a diurnal pattern. It also allowed for comparison between the weekday and weekend workload.
 
 \subsection{Tools}
 
