@@ -299,7 +299,7 @@ class Parser(object):
                 line = line.strip()
                 raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
                 if not raw_parts:
-                    print("{}: Unable to parse request: {}".format(i, line))
+                    print("{}: Unable to parse request: {}".format(i, line), file=sys.stderr)
                     continue
                 try:
                     request = {}
