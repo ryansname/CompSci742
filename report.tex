@@ -104,7 +104,9 @@ To record the results we used a custom parser written in python. By custom writi
 \end{figure*}
 
 \subsection{Document Types}\label{sub:doc_types}
-We decided to analyse the number of times different file types were accessed and present these as a fraction of the total number of file accesses. We categorised files into HTML, images, web, video, audio and other. We defined the web category as files with the extensions \texttt{.css}, \texttt{.js}, \texttt{.cfm}, \texttt{.php}, \texttt{.asp}, \texttt{.aspx} and \texttt{.xml}. We also defined other as any files which were of an unknown type. 
+We decided to analyse the number of times different file types were accessed and present these as a fraction of the total number of file accesses. We categorised files into HTML, images, web, video, audio, document and other. We defined the web category as files with the extensions \texttt{.css}, \texttt{.js}, \texttt{.cfm}, \texttt{.php}, \texttt{.asp}, \texttt{.aspx} and \texttt{.xml}. We also defined other as any files which were of an unknown type. We expected this to be useful characteristic to analyse as it allows us to see trends in what files are being accessed. The results of this analysis across all three Web servers are shown in Figure \ref{fig:file_types}.
+
+The document type analysis revealed an interesting difference between the more 2006-2007 log and the 1994-1995 logs. We can see that in the 1994-1995 logs, HTML were the most accessed documents excluding documents of an unknown type. This observation is consistent with results obtained by Arlitt and Williamson \cite{keynote}. However, we can see that in the 2006-2007 log only a small fraction of the files accessed were HTML files. We can also note that in the 2006-2007 log, there were substantially more requests for images and Web file types than in the 1994-1995 logs. We have attributed this to increasing network bandwidth and advancements in the technology available for Web development.
 
 \section{Discussion}\label{discussion}
 
