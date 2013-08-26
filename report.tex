@@ -92,11 +92,6 @@ To record the results we used a custom parser written in python. By custom writi
 
 \section{Results}\label{results}
 
-\begin{figure}[t]
-    \includegraphics{images/filesize}
-    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
-\end{figure}
-
 \begin{table}
     \caption{Access Log Characteristics}\label{tab:characteristics}
     \begin{tabular}[ht!]{ | l || c | c | c | }
@@ -114,44 +109,25 @@ To record the results we used a custom parser written in python. By custom writi
     \end{tabular}
 \end{table}
 
-\begin{figure}[t]
-    \includegraphics{images/concentration}
-    \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
-\end{figure}
-
-\begin{figure*}
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/calgarytime}
-        \caption{}\label{fig:calgary}
-    \end{subfigure}
-\qquad
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/conferencetime}
-        \caption{}\label{fig:conference}
-    \end{subfigure}
-
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/usasktime}
-        \caption{}\label{fig:usask}
-    \end{subfigure}
-    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) Conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
-\end{figure*}
+\subsection{Success Rate} % (fold)
+\label{sub:success_rate}
+For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
+% subsection success_rate (end)
 
 \begin{figure*}
     \includegraphics{images/filetype}
     \caption{Distribution of document types}\label{fig:file_types}
 \end{figure*}
 
-\subsection{Success Rate} % (fold)
-\label{sub:success_rate}
-For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
-% subsection success_rate (end)
-
 \subsection{Document Types}\label{sub:doc_types}
 We decided to analyse the number of times different file types were accessed and present these as a fraction of the total number of file accesses. We categorised files into HTML, images, web, video, audio, document and other. We defined the web category as files with the extensions \texttt{.css}, \texttt{.js}, \texttt{.cfm}, \texttt{.php}, \texttt{.asp}, \texttt{.aspx} and \texttt{.xml}. We also defined other as any files which were of an unknown type. We expected this to be useful characteristic to analyse as it allows us to see trends in what files are being accessed. The results of this analysis across all three Web servers are shown in Figure \ref{fig:file_types}.
 
 The document type analysis revealed an interesting difference between the 2006-2007 log and the 1994-1995 logs. We can see that in the 1994-1995 logs, HTML was the most accessed document excluding documents of an unknown type. This observation is consistent with results obtained by Arlitt and Williamson \cite{keynote}. However, we can see that in the 2006-2007 log only a small fraction of the files accessed were HTML files. We can also note that in the 2006-2007 log, there were substantially more requests for images and Web file types than in the 1994-1995 logs. We have attributed this to increasing network bandwidth and advancements in the technology available for Web development.
+
+\begin{figure}[t]
+    \includegraphics{images/concentration}
+    \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
+\end{figure}
 
 \subsection{Concentration of References} % (fold)
 \label{sub:concentration_of_references}
@@ -179,12 +155,36 @@ Faber et al. \cite{Faber} conducted the same experiment ten years later. Their o
 Our results for one time referencing shows an outcome which lies in between the two studies \cite{invariants, Faber}. Figure \ref{tab:characteristics} shows that 32\% - 60\% of data files were accessed only once. The original invariant still holds true in these data sets, however the data set from University of Saskatchewan relates more to the latter study \cite{Faber}. Even though the two datasets are from universities, they display a notable differences. This suggests that results do not directly correlate to the type of server (i.e. server at a university and academic conference) but the presence of dynamic content.
 % subsection one_time_referencing (end)
 
+\begin{figure}[t]
+    \includegraphics{images/filesize}
+    \caption{Frequency of file sizes for files requested}\label{fig:filesize}
+\end{figure}
+
 \subsection{File Size Distribution} % (fold)
 \label{sub:file_size_distribution}
 Figure \ref{fig:filesize} shows the file size distribution of the distinct files transferred by each site. As observed at the lower end of the graph for each server log, they all have a very few small files (less than 100 bytes). The majority of the files seem to be in the range of 100 - 100,000 bytes, while a few files are larger than 100,000 bytes. This file size distribution is consistent with results reported by other studies \cite{keynote, Braun}.
 
 A trait we can see from the figure is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
 % subsection file_size_distribution (end)
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/calgarytime}
+        \caption{}\label{fig:calgary}
+    \end{subfigure}
+\qquad
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/conferencetime}
+        \caption{}\label{fig:conference}
+    \end{subfigure}
+
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/usasktime}
+        \caption{}\label{fig:usask}
+    \end{subfigure}
+    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) Conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
+\end{figure*}
 
 \subsection{Weekday vs Weekend} % (fold)
 \label{sub:weekday_vs_weekend}
