@@ -164,7 +164,7 @@ Our results for one time referencing shows an outcome which lies in between the 
 \label{sub:file_size_distribution}
 Figure \ref{fig:filesize} shows the file size distribution of the distinct files transferred by each site. As observed at the lower end of the graph for each server log, they all have a very few small files (less than 100 bytes). The majority of the files seem to be in the range of 100 - 100,000 bytes, while a few files are larger than 100,000 bytes. This file size distribution is consistent with results reported by other studies \cite{keynote, Braun}.
 
-A trait we can see from the figure is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
+A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
 % subsection file_size_distribution (end)
 
 \begin{figure*}
@@ -219,7 +219,7 @@ Our analysis on document types revealed that in the conference Web server logs, 
 
 Our analysis showed that references are still highly concentrated. This can be used by Web server admins as an incentive to cache their most common files. This is because caching only 10\% of their files on high speed storage would increase the speed of 90\% of their incoming requests. Unfortunately this cannot be a one size fits all approach as there are many Web sites that dynamically create their webpages from templates where pages returned from the same website address are different and simply caching the page would not be trivial.
 
-As stated in the study from \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
+As stated in the study by Arlitt and Williamson \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
 
 From the results you can see that trend for file size distribution is the same for all datasets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the filesize remains relatively constant. This is useful as browers are able to make multiple requests to the same Web server to request multiple different files in parallel.
 
