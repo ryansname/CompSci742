@@ -199,7 +199,7 @@ A trait we can see from the figure is that it is heavy-tailed. In other words, a
     \end{tabular}
 \end{table}
 
-We examined the access time of our data sets and their trends throughout the week. The Calgary and Saskatchewan servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website-  was not nearly as significant. The percentage of weekend accesses at Saskatchewan are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and Saskatchewan show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
+We examined the access time of our data sets and their trends throughout the week. The Calgary and Saskatchewan servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website was not nearly as significant. The percentage of weekend accesses at Saskatchewan are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and Saskatchewan show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
 % subsection weekday_vs_weekend (end)
 
 \subsection{Daytime versus nighttime usage} % (fold)
@@ -229,8 +229,9 @@ We observed no diurnal behaviour on the conference webserver. We believed this w
 
 Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
 
-
 \section{Conclusions and Future Work}\label{conclusions}
+This study was not comprehensive and is meant as a basis from which further analysis can be carried out. Non-academic site is an area that would be of interest for continued study of the invariants.
+We also identified that due to the static nature of images it would be possible to cache them for an extended period of time without risking cache inconsistancy.
 
 \printbibliography
 \end{document}
