@@ -216,6 +216,7 @@ Data gathered about file caching on HTTP servers is useful as it can be applied 
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
+Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \ref{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
 
 \section{Conclusions and Future Work}\label{conclusions}
 
