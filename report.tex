@@ -1,8 +1,9 @@
 \documentclass[10pt,conference]{IEEEtran}
 \let\labelindent\relax
+\usepackage{cite}
 \usepackage{enumitem}
 \usepackage{graphicx}
-\usepackage{cite}
+\usepackage{subcaption}
 \usepackage{url}
 
 \title{Title}
@@ -89,19 +90,56 @@ To record the results we used a custom parser written in python. By custom writi
 
 \section{Results}\label{results}
 
+\begin{table}
+    \caption{Access Log Characteristics}\label{tab:characteristics}
+    \begin{tabular}[ht!]{ | l || c | c | c | }
+        \hline
+        Invariant & Calgary & Saskatchewan & Conference \\
+        \hline
+        Unique IPs & 2* & 162512 & 130400 \\
+        Success Rate & 96.07\% & 99.06\% & 96.78\% \\
+        Mean Transfer & 10.9kB & 5.4kB & 23.0kB \\
+        Median Transfer & 1697kB & 1712kB & 15015kB \\
+        One Time Referencing & 32.4\% & 59.95\% & 43.27\% \\
+        Cache Hit Rate & 13.5\% & 6.3\% & 16.3\% \\
+        Cache Bytes Saved & 781MB & 525MB & 34.8GB \\
+        Total Bytes Transferred & 7946MB & 13GB & 232GB \\
+        \hline
+    \end{tabular}
+\end{table}
+
 \begin{figure}
     \includegraphics{images/filesize}
-    \caption{Hi}\label{fig:filesize}
+    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
 \end{figure}
 
 \begin{figure}
     \includegraphics{images/concentration}
-    \caption{Hi}\label{fig:file_accesses}
+    \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
 \end{figure}
 
 \begin{figure*}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/calgarytime}
+        \caption{}\label{fig:calgary}
+    \end{subfigure}
+\qquad
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/conferencetime}
+        \caption{}\label{fig:conference}
+    \end{subfigure}
+
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/usasktime}
+        \caption{}\label{fig:usask}
+    \end{subfigure}
+    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) Conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
+\end{figure*}
+
+\begin{figure*}
     \includegraphics{images/filetype}
-    \caption{Hi}\label{fig:file_types}
+    \caption{Distribution of document types}\label{fig:file_types}
 \end{figure*}
 
 \subsection{Document Types}\label{sub:doc_types}
