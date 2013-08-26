@@ -15,6 +15,7 @@
 \maketitle
 
 \begin{abstract}
+The overall traffic volume on the Web is continually growing as is user expectations, which has highlighted the need to optimise the performance of the Web. In this paper we will analyse two Web server logs from 1994-1995 and one from 2006-2007. This paper will focus on characterising the workload based on success rates, document types, concentration of references, one time referencing, file size distribution, usage patterns and caching. An emphasis will be placed on how the characteristics of the workloads have changed over time, and as such we have identified several changes in workload characteristics. Finally, the knowledge gained from this study will be linked to practical implications and areas which could benefit from optimisations.
 \end{abstract}
 
 \section{Introduction}
@@ -45,6 +46,8 @@ Almeida et al. \cite{almeida} analysed the performance of a PC acting as dedicat
 Almeida et al. \cite{reference_locality} examined models for gathering data on spatial and temporal locality. The motivation of this study was the insufficiency of simple popularity based models being insufficient for capturing spatial and temporal locality. They discovered that for accesses following a temporal access pattern, caching is beneficial in improving performance. Whereas, for accesses following a spatial access pattern, prefetching is beneficial in improving performance.
 
 In 2012, Tantithamthavorn and Rungsawang \cite{facebook} conducted a study on Facebook usage at Kasetsart University based on a Web traffic log. Their study analysed the time spent communicating online, distribution of HTTP requests, Facebook traffic workload analysis, and more. The results showed that the distribution of HTTP Requests at the level of hostname followed a Zipfian distribution. Additionally, they suggested that long running sessions may be due to idle users. Overall the study showed a typical Web workload at a university.
+
+This paper aims to further contribute to the understanding of workload characteristics and examine how they are applicable to practical situations. In particular, we will examine potential areas where caching could be optimised to provide better performance.
 
 \section{Methodology}\label{methodology}
 \subsection{Characteristics}\label{lab:characteristics}
@@ -199,7 +202,7 @@ We examined the access time of our data sets and their trends throughout the wee
 
 \subsection{Daytime versus nighttime usage} % (fold)
 \label{sub:daytime_versus_nighttime_usage}
-Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very different. Usage at night remains relatively the same throughout the week with the lowest points between 0:00 and 6:00. Daytime usage peaks between 12:00 and 15:00 each day, and form a platform around 18:00, after which usage drops steeply.  This platform is seen more clearly on the Saskatchewan server than the Calgary server, and can be observed over the weekend on the Saskatchewan server. This observation is less obvious in the conference log. The conference log has an additional peak on each day of the week between 0:00 and 6:00 instead of a low. There is a less obvious diurnal pattern in the weekdays with the lowest point just short of 0:00, and absolutely no diurnal pattern in the weekend, aligning with a previous study by Mahanti et al. \cite{Mahanti_Wu}. However there is clearly still a significant drop between 12:00 and 18:00 on each day between Monday and Saturday. 
+Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very different. Usage at night remains relatively the same throughout the week with the lowest points between 0:00 and 6:00. Daytime usage peaks between 12:00 and 15:00 each day, and form a platform around 18:00, after which usage drops steeply. This platform is seen more clearly on the Saskatchewan server than the Calgary server, and can be observed over the weekend on the Saskatchewan server. This observation is less obvious in the conference log. The conference log has an additional peak on each day of the week between 0:00 and 6:00 instead of a low which may be due to a global audience accessing the site. There is a no strong diurnal pattern in the weekdays with the lowest point just short of 0:00, and absolutely no diurnal pattern in the weekend, aligning with a previous study by Mahanti et al. \cite{Mahanti_Wu}. However there is clearly still a significant drop between 12:00 and 18:00 on each day between Monday and Saturday. 
 % subsection daytime_versus_nighttime_usage (end)
 
 \subsection{Caching} % (fold)
