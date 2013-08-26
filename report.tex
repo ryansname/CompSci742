@@ -8,7 +8,7 @@
 \usepackage[style=ieee, sorting=nty, backend=biber]{biblatex}
 \bibliography{references.bib}
 
-\title{Title}
+\title{The Evolution of Workload Characteristics}
 \author{\IEEEauthorblockN{Chelsea Farley, Ryan Lewis, David Armstrong, Rina Gao and Ryunosuke Madenokoji}
 \IEEEauthorblockA{The University of Auckland}}
 \date{Today}
@@ -17,7 +17,7 @@
 \maketitle
 
 \begin{abstract}
-The overall traffic volume on the Web is continually growing as is user expectations, which has highlighted the need to optimise the performance of the Web. In this paper we will analyse two Web server logs from 1994-1995 and one from 2006-2007. This paper will focus on characterising the workload based on success rates, document types, concentration of references, one time referencing, file size distribution, usage patterns and caching. An emphasis will be placed on how the characteristics of the workloads have changed over time, and as such we have identified several changes in workload characteristics. Finally, the knowledge gained from this study will be linked to practical implications and areas which could benefit from optimisations.
+The overall traffic volume on the Web is continually growing as is user expectations, which has highlighted the need to optimise the performance of the Web. In this paper we will analyse two Web server logs from 1994-1995 and one from 2006-2007. This paper will focus on characterising the workload based on success rates, document types, concentration of references, one time referencing, file size distribution, usage patterns and caching. An emphasis will be placed on how the characteristics of the workloads have changed over time, and as such we have identified several changes in workload characteristics. Finally, the knowledge gained from this study will be linked to practical implications and areas which could benefit from optimisation.
 \end{abstract}
 
 \section{Introduction}
@@ -39,7 +39,7 @@ Williams et al. \cite{williams05} produced an analysis of Web server logs from 2
 
 In 2007, Gill et al. \cite{youtube} analysed YouTube usage on the University of Calgary network and collected statistics on global video popularity. The aim of this study was to investigate Web 2.0 workload characteristics to allow for improvements in network management, capacity planning and the design of new systems. Web 2.0 marks a shift towards user generated content and with it comes a plethora of metadata. It was found that although the concentration of references was reduced from that of traditional Web workloads \cite{keynote}, metadata should be used to improve the effectiveness of caching.
 
-Cherkasova and Gupta \cite{Cherkasova} investigated client access patterns, media server access trends, and the evolution of media on websites over time. Their research was split into static and temporal analysis of the data. They looked at the locality of accesses, which was similar to that of a Web server with 14\%-30\% of the server files accounting for 90\% of media sessions, and 92\%-94\% of the bytes transferred. Additionally, 16\%-19\% of files were accessed only once, and the first five weeks of a file’s existence account for 70\%-80\% of its total accesses. They also looked into the trends associated with media session lengths, and the behavior of clients with incomplete sessions. Their research concentrated on comparing media server workloads with traditional web server workloads.
+Cherkasova and Gupta \cite{Cherkasova} investigated client access patterns, media server access trends, and the evolution of media on websites over time. Their research was split into static and temporal analysis of the data. They looked at the locality of accesses, which was similar to that of a Web server with 14\%-30\% of the server files accounting for 90\% of media sessions, and 92\%-94\% of the bytes transferred. Additionally, 16\%-19\% of files were accessed only once, and the first five weeks of a file’s existence account for 70\%-80\% of its total accesses. They also looked into the trends associated with media session lengths, and the behaviour of clients with incomplete sessions. Their research concentrated on comparing media server workloads with traditional web server workloads.
 
 In 2002, Bai and Williamson \cite{Bai} analysed the request arrival rate at each level of a multi-layer web proxy caching hierarchy using trace-driven simulation and artificial web workloads. The presence of a Web proxy cache means that requests are removed from the Web server request stream when there is a cache hit at the proxy. The results showed that there was a decrease in the peak and mean request arrival rates in the presence of a multi-layer web caching hierarchy. However, they also noted that the burstiness of request arrivals may vary or stay the same. They discovered that a gamma distribution may be used to model the arrival of requests in a web caching hierarchy.
 
@@ -91,24 +91,24 @@ To determine which characteristics from section \ref{lab:characteristics} were p
 \subsubsection{Number of times each status code appears}
 We recorded a count of each status code or range of status codes so that we could characterise both success rate and caching.
 The number of successful requests is the total number of requests that had the status code of either 2xx (Success) or 3xx (Redirection). This allows us to characterise the workloads based on percentage of successful requests.
-We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterize the effectiveness of caching.
+We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterise the effectiveness of caching.
 
 \subsubsection{Number of times each file is accessed}
 This metric is a count of each access to a particular resource.
-The measurements produced by this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only once.
+The measurements produced by this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availability. In addition this metric will show the number of files accessed only once.
 
 \subsubsection{Size of each file transferred}
 This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request. 
 It also allowed us to calculate the bandwidth savings from client side caching by combining this metric with the status codes collected.
 
 \subsubsection{Total number of bytes transferred}
-This metric simply totalled up the total bandwidth used over the logging period. It allowed us to see the relative effect of caching when comparing the two datasets of different sizes.
+This metric simply totalled up the total bandwidth used over the logging period. It allowed us to see the relative effect of caching when comparing the two data sets of different sizes.
 
 \subsubsection{The time each file is accessed}
 We also recorded the time of each file access. This metric allowed us to plot the number of accesses over time to see if the workload is still following a diurnal pattern. It also allowed for comparison between the weekday and weekend workload.
 
 \subsection{Tools}
-To record the results we used a custom parser written in python. By custom writing the parser it allowed for rapid development as there was no confusion about the abilities of the tool. It was also possible to add measurements to the tool with no learning curve, which was necessary due to the limited timeframe of this research.
+To record the results we used a custom parser written in python. By custom writing the parser it allowed for rapid development as there was no confusion about the abilities of the tool. It was also possible to add measurements to the tool with no learning curve, which was necessary due to the limited time frame of this research.
 
 \section{Results}\label{results}
 
@@ -161,18 +161,18 @@ The document type analysis revealed an interesting difference between the 2006-2
         Conference & 95.9\%
     \end{tabular}
 \end{table}
-Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three datasets.
+Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three data sets.
 
-Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of requests received by servers in all the logs we analysed. The conference dataset showed the most concentration and the other two datasets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by Mahanti et al.\cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
+Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of requests received by servers in all the logs we analysed. The conference data set showed the most concentration and the other two data sets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by Mahanti et al.\cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
 % subsection concentration_of_references (end)
 
 \subsection{One Time Referencing} % (fold)
 \label{sub:one_time_referencing}
-The term one time referencing refers to the percentages of files that have only been requested once in a server log. In the original work by Arlitt and Williamson \cite{invariants} it was discovered that 23 - 42\% of the distinct files and 14 - 42\% of the distinct bytes were viewed only once in their datasets. They confirmed that approximately one third of the data were accessed only once, thus stating it as an invariant which has a great impact on the effectiveness of content caching.
+The term one time referencing refers to the percentages of files that have only been requested once in a server log. In the original work by Arlitt and Williamson \cite{invariants} it was discovered that 23 - 42\% of the distinct files and 14 - 42\% of the distinct bytes were viewed only once in their data sets. They confirmed that approximately one third of the data were accessed only once, thus stating it as an invariant which has a great impact on the effectiveness of content caching.
 
 Faber et al. \cite{Faber} conducted the same experiment ten years later. Their outcomes were significantly different where at least two-thirds of the files and bytes accessed in the log were accessed only once; 65 - 82\% of the files and 65 - 81\% of the bytes were requested only once in three of their servers. However, they did not completely disregard the original invariant because one of the access logs were of an academic institute compared to other three which were scientific Web servers.
 
-Our results for one time referencing shows an outcome which lies in between the two studies \cite{invariants, Faber}. Figure \ref{tab:characteristics} shows that 32\% - 60\% of data files were accessed only once. The original invariant still holds true in these data sets, however the data set from University of Saskatchewan relates more to the latter study \cite{Faber}. Even though the two datasets are from universities, they display a notable differences. This suggests that results do not directly correlate to the type of server (i.e. server at a university and academic conference) but the presence of dynamic content.
+Our results for one time referencing shows an outcome which lies in between the two studies \cite{invariants, Faber}. Figure \ref{tab:characteristics} shows that 32\% - 60\% of data files were accessed only once. The original invariant still holds true in these data sets, however the data set from University of Saskatchewan relates more to the latter study \cite{Faber}. Even though the two data sets are from universities, they display a notable differences. This suggests that results do not directly correlate to the type of server (i.e. server at a university and academic conference) but the presence of dynamic content.
 % subsection one_time_referencing (end)
 
 \begin{figure}[t]
@@ -238,21 +238,21 @@ Over the time period that each data set was logged, we calculated the total byte
 \section{Discussion}\label{discussion}
 Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \cite{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
 
-Our analysis showed that references are still highly concentrated. This can be used by Web server admins as an incentive to cache their most common files. This is because caching only 10\% of their files on high speed storage would increase the speed of 90\% of their incoming requests. Unfortunately this cannot be a one size fits all approach as there are many Web sites that dynamically create their webpages from templates where pages returned from the same website address are different and simply caching the page would not be trivial.
+Our analysis showed that references are still highly concentrated. This can be used by Web server admins as an incentive to cache their most common files. This is because caching only 10\% of their files on high speed storage would increase the speed of 90\% of their incoming requests. Unfortunately this cannot be a one size fits all approach as there are many Web sites that dynamically create their web pages from templates where pages returned from the same website address are different and simply caching the page would not be trivial.
 
 As stated in the study by Arlitt and Williamson \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
 
-From the results you can see that trend for file size distribution is the same for all datasets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the filesize remains relatively constant. This is useful as browers are able to make multiple requests to the same Web server to request multiple different files in parallel.
+From the results you can see that trend for file size distribution is the same for all data sets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the file size remains relatively constant. This is useful as browsers are able to make multiple requests to the same Web server to request multiple different files in parallel.
 
-We have clearly shown that for all the datasets there is a disparity between the number of requests made on a weekday and the number made on the weekend. As the weekend usage is often less than one third the number of requests as during the week the host can make use of the lowered demand to either run computation on some of the web hosts during the weekend or alternatively shut down some of the web hosts during the weekend to reduce running costs.
+We have clearly shown that for all the data sets there is a disparity between the number of requests made on a weekday and the number made on the weekend. As the weekend usage is often less than one third the number of requests as during the week the host can make use of the lowered demand to either run computation on some of the web hosts during the weekend or alternatively shut down some of the web hosts during the weekend to reduce running costs.
 
-We observed no diurnal behaviour on the conference webserver. We believed this was due to it having a more global audience than either of the two university based websites. If this is the case then there is reason to believe that other websites with a global audience will experience less of a diurnal cycle also, however examination of more datasets is required before this can be confirmed.
+We observed no diurnal behaviour on the conference Web server. We believed this was due to it having a more global audience than either of the two university based websites. If this is the case then there is reason to believe that other websites with a global audience will experience less of a diurnal cycle also, however examination of more data sets is required before this can be confirmed.
 
-Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
+Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimised to save bandwidth and resources for both the server and the requesting client.
 
 \section{Conclusions and Future Work}\label{conclusions}
 This study was not comprehensive and is meant as a basis from which further analysis can be carried out. Non-academic site is an area that would be of interest for continued study of the invariants.
-We also identified that due to the static nature of images it would be possible to cache them for an extended period of time without risking cache inconsistancy.
+We also identified that due to the static nature of images it would be possible to cache them for an extended period of time without risking cache inconsistency.
 
 \printbibliography
 \end{document}
