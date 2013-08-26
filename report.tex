@@ -171,9 +171,7 @@ The term one time referencing refers to the percentages of files that have only 
 
 Faber et al. \cite{Faber} conducted the same experiment ten years later. Their outcomes were significantly different where at least two-thirds of the files and bytes accessed in the log were accessed only once; 65 - 82\% of the files and 65 - 81\% of the bytes were requested only once in three of their servers. However, they did not completely disregard the original invariant because one of the access logs were of an academic institute compared to other three which were scientific Web servers.
 
-Our results for one time referencing shows an outcome which lies in between the two studies \cite{invariants, Faber}. Figure \ref{tab:characteristics} shows that 32\% - 60\% of data files were accessed only once. The original invariant still holds true in these data sets, however the data set from University of Saskatchewan relates more to the latter study \cite{Faber}. Even though the two datasets are from universities, they display a notable differences. This suggests that results do not directly correlate to the type of server (i.e. server at a university and academic conference) but the presence of a dynamic content.
-
-As stated in the study from \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server cache are being wasted, thus proving server inefficiency.
+Our results for one time referencing shows an outcome which lies in between the two studies \cite{invariants, Faber}. Figure \ref{tab:characteristics} shows that 32\% - 60\% of data files were accessed only once. The original invariant still holds true in these data sets, however the data set from University of Saskatchewan relates more to the latter study \cite{Faber}. Even though the two datasets are from universities, they display a notable differences. This suggests that results do not directly correlate to the type of server (i.e. server at a university and academic conference) but the presence of dynamic content.
 % subsection one_time_referencing (end)
 
 \subsection{File Size Distribution} % (fold)
@@ -209,13 +207,23 @@ Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very 
 We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set. We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the Conference data set. These results are summarised in the table \ref{tab:characteristics}.
 
 Over the time period that each data set was logged, we calculated the total bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth saved from 7.9GB for the Calgary server, 525MB of bandwidth saved from 13GB for the Saskatchewan server and 34.8GB of bandwidth from 232GB for the conference server.
-
-Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
-
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
 Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \cite{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
+
+Our analysis showed that references are still highly concentrated. This can be used by Web server admins as an incentive to cache their most common files. This is because caching only 10\% of their files on high speed storage would increase the speed of 90\% of their incoming requests. Unfortunately this cannot be a one size fits all approach as there are many Web sites that dynamically create their webpages from templates where pages returned from the same website address are different and simply caching the page would not be trivial.
+
+As stated in the study from \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
+
+From the results you can see that trend for file size distribution is the same for all datasets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the filesize remains relatively constant. This is useful as browers are able to make multiple requests to the same Web server to request multiple different files in parallel.
+
+We have clearly shown that for all the datasets there is a disparity between the number of requests made on a weekday and the number made on the weekend. As the weekend usage is often less than one third the number of requests as during the week the host can make use of the lowered demand to either run computation on some of the web hosts during the weekend or alternatively shut down some of the web hosts during the weekend to reduce running costs.
+
+We observed no diurnal behaviour on the conference webserver. We believed this was due to it having a more global audience than either of the two university based websites. If this is the case then there is reason to believe that other websites with a global audience will experience less of a diurnal cycle also, however examination of more datasets is required before this can be confirmed.
+
+Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
+
 
 \section{Conclusions and Future Work}\label{conclusions}
 
