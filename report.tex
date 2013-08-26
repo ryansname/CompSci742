@@ -1,10 +1,12 @@
 \documentclass[10pt,conference]{IEEEtran}
 \let\labelindent\relax
-\usepackage{cite}
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{url}
+
+\usepackage[style=ieee, sorting=nty, backend=biber]{biblatex}
+\bibliography{references.bib}
 
 \title{Title}
 \author{\IEEEauthorblockN{Chelsea Farley, Ryan Lewis, David Armstrong, Rina Gao and Ryunosuke Madenokoji}
@@ -230,6 +232,5 @@ Data gathered about file caching on HTTP servers is useful as it can be applied 
 
 \section{Conclusions and Future Work}\label{conclusions}
 
-\bibliographystyle{IEEEtran}
-\bibliography{references.bib}
+\printbibliography
 \end{document}
