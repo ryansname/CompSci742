@@ -180,8 +180,40 @@ As stated in the study from \cite{invariants}, one time referencing is a concern
 \label{sub:file_size_distribution}
 Figure \ref{fig:filesize} shows the file size distribution of the distinct files transferred by each site. As observed at the lower end of the graph for each server log, they all have a very few small files (less than 100 bytes). The majority of the files seem to be in the range of 100 - 100,000 bytes, while a few files are larger than 100,000 bytes. This file size distribution is consistent with results reported by other studies \cite{keynote, Braun}.
 
-A trait we can see from the figure is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha \end{math} < 1. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
+A trait we can see from the figure is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
 % subsection file_size_distribution (end)
+
+\subsection{Weekday vs Weekend} % (fold)
+\label{sub:weekday_vs_weekend}
+\begin{table}[h]
+    \caption{Average weekday and weekend usage}\label{tab:weeklyusage}
+    \begin{tabular}{l | c c}
+        Log & Average Weekday Usage & Average Weekend Usage\\
+        \hline
+        Calgary & 65.4\% & 34.6\%\\
+        Saskatchewan & 62.3\% & 37.7\%\\
+        Conference & 61.6\% & 38.4\%
+    \end{tabular}
+    }
+\end{table}
+
+We examined the access time of our data sets and their trends throughout the week. The department and campus-wide servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website-  was not nearly as significant. The percentage of weekend accesses at USask are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and USask show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
+% subsection weekday_vs_weekend (end)
+
+\subsection{Daytime versus nighttime usage} % (fold)
+\label{sub:daytime_versus_nighttime_usage}
+Daytime versus nighttime usage in the department and campus-wide servers are very different. Usage at night remains relatively the same throughout the week with the lowest points between 0:00 and 6:00. Daytime usage peaks between 12:00 and 15:00 each day, and form a platform around 18:00, after which usage drops steeply.  This platform is seen more clearly on the campus-wide server than the department server, and can be observed over the weekend on the campus-wide server. This observation is less obvious in the conference log. The conference log has an additional peak on each day of the week between 0:00 and 6:00 instead of a low. There is a less obvious diurnal pattern in the weekdays with the lowest point just short of 0:00, and absolutely no diurnal pattern in the weekend, aligning with a previous study by Mahanti et al. \cite{Mahanti_Wu}. However there is clearly still a significant drop between 12:00 and 18:00 on each day between Monday and Saturday. 
+% subsection daytime_versus_nighttime_usage (end)
+
+\subsection{Caching} % (fold)
+\label{sub:caching}
+We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set . We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the Conference data set. These results are summarized in the table \ref{tab:characteristics}.
+
+Over the time period that each data set was logged, we calculated the total  Bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth for the Calgary server, 525MB of bandwidth for the Saskatchewan server and 34.8GB of bandwidth for the conference server.
+
+Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
+
+% subsection caching (end)
 
 \section{Discussion}\label{discussion}
 
