@@ -19,9 +19,9 @@
 \section{Introduction}
 There has been an increase in the overall traffic volume on the Web. The rate of increase of data traffic has been shown to follow Moore's law \cite{williams05}. Moore's law as it pertains to data traffic, states that the overall traffic volume will double annually. This property of data traffic means that the scalability of the Web is more important than ever. Additionally, the time an average user will wait for a page to load has decreased from eight seconds in 2000 to three seconds in 2009 \cite{Butkiewicz}. Therefore, it is becoming paramount that optimisations are made to improve Web performance.
 
-In order to improve the performance and scalability of the Web, we must first develop an understanding of current Web workload characteristics and how they have changed over time. An understanding of the evolution of workload characteristics is vital in the development of effective caching architectures which in turn leads to improved perfomance. Additionally, workload analysis can aid in capacity planning, generating workload generating models and network administration. Therefore, the purpose of this paper is to revisit several of the invariants identified by Arlitt and Williamson \cite{keynote} and analyse if they remain true for a more recent Web server log. We will be analysing two of the Web server logs in Arlitt and Williamson's original study: a departmental-level Web server at the University of Calgary and a campus-wide Web server at the University of Saskatchewan \cite{keynote}. Our more recent Web server log has data that was collected over a one year period between 2006 and 2007 from an academic conference Web site.
+In order to improve the performance and scalability of the Web, we must first develop an understanding of current Web workload characteristics and how they have changed over time. An understanding of the evolution of workload characteristics is vital in the development of effective caching architectures which, in turn, leads to improved performance. Additionally, workload analysis can aid in capacity planning, generating workload-generating models and network administration. Therefore, the purpose of this paper is to revisit several of the invariants identified by Arlitt and Williamson \cite{keynote} and evaluate whether they are applicable to a more recent Web server log. We will be analysing two of the Web server logs used in Arlitt and Williamson's original study: a departmental-level Web server at the University of Calgary and a campus-wide Web server at the University of Saskatchewan \cite{keynote}. Our more recent Web server log has data that was collected over a one year period between 2006 and 2007 from an academic conference Web site.
 
-The remainder of the paper is organised as follows. In the following section we will discuss work related to our analysis and what our analysis contributes. In section \ref{methodology} we describe the characteristics we chose to analyse and the metrics and tools we used to perform this analysis. Then we will explain the results we recorded in section \ref{results} and explain the practical implications of these results in section \ref{discussion}. Finally, we will conclude our paper and examine potential future work in the area of web workload characterisation in section \ref{conclusions}.
+The remainder of the paper is organised as follows. In the following section we will discuss works related to our analysis and what our investigation contributes. In section \ref{methodology} we describe the characteristics we have chosen to analyse, and the metrics and tools we used to perform this study. Then we will explain the results we recorded in section \ref{results} and explain the practical implications of these results in section \ref{discussion}. Finally, we will conclude our paper and examine potential future work in the area of web workload characterisation in section \ref{conclusions}.
 
 \section{Related Work}\label{related_work}
 There have been several studies investigating the characteristics of Web workloads. These studies can be useful in understanding the evolution of Web traffic under differing conditions. In order to improve the scalability and performance of the Internet, we must have a complete understanding of the different traffic flows it may have to withstand. We have summarised several previous studies to provide an overview of these traffic flows. 
@@ -47,21 +47,44 @@ In 2012, Tantithamthavorn and Rungsawang \cite{facebook} conducted a study on Fa
 
 \section{Methodology}\label{methodology}
 \subsection{Characteristics}\label{lab:characteristics}
+In this study, we have chosen to examine five of the characteristics from Arlitt and Williamson's initial search\cite{needed} for ten web server workload invariants: the success rate, file types, mean transfer, one time referencing, and the concentration of references. We also look into two of the invariants found by Gupta and Viecco\cite{needed}: weekday versus weekend usage and diurnal usage. Finally, we add two original invariants: cache rate, and the effectiveness of caching.
+
+The success rate looks at the occurrence of each success code in the log: successful, found, not modified and unsuccessful, and file types refer to the frequency of requests on files of each type. Mean transfer is the mean number of bytes transferred in an individual request. One time referencing looks at the percentage of files and bytes that are requested only once in the logged period, while the concentration of references is a measurement of the frequency of distinct file accesses. We compare the usage of these sites between weekdays and weekends, and also between daytime and nighttime. Cache rate looks at the ratio of number of accesses of a file, and the number of times it was cached, while the effectiveness of caching refers to the amount of bandwidth saved with caching.
 \subsection{Metrics}
 To determine which characteristics from section \ref{lab:characteristics} were present we decided on the following metrics:
 \begin{itemize}[noitemsep]
-    \item IpCollector
-    \item SuccessCollector
-    \item MeanTransferCollector
-    \item ProgressReporter
-    \item OneTimeReferenceCollector
-    \item CacheCollector
-    \item CachedBytes
-    \item TotalTransferCollector
-    \item ReferenceConcentrationCollector
-    \item AccessTimeCollector
+    \item Unique IP addresses
+    \item Number of times each status code appears
+    \item Number of times each file is accessed
+    \item Number of bytes saved via caching
+    \item Number of bytes transferred
+    \item The time each file is requested
 \end{itemize}
+
+\subsection{Unique IP Addresses}
+Unique IP addresses is a count of how many unique IP addressess accessed each site. This metric allowed us to give an estimate of how many people were accessing the website. 
+
+\subsection{Number of times each status code appears}
+We recorded a count of each status code or range of status codes so that we could characterise both success rate and caching.
+The number of successful requests is the total number of requests that had the status code of either 2xx (Success) or 3xx (Redirection). This allows us to characterise the workloads based on percentage of successful requests.
+We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterize the effectiveness of caching on number of requests.
+
+\subsection{Number of times each file is accessed}
+This metric is a count of each access to a particular resource.
+This measurements of this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only a single time.
+
+\subsection{Number of bytes transferred}
+This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request. 
+It also allowed us to calculate the bandwidth savings from client side caching by combining this metric with the status codes collected.
+
+\subsection{Number of bytes transferred}
+This metric simply totalled up the total bandwidth used over the logging period. It allowed us to see the relative effect of caching when comparing the two datasets of different sizes.
+
+\subsection{The time each file is accessed}
+We also recorded the time of each file access binned into hourly bins. This metric allowed us to plot the number of accesses over time to see if the workload is still following a diurnal pattern. It also allowed for comparison between the weekday and weekend workload.
+
 \subsection{Tools}
+To record the results we used a custom parser written in python. By custom writing the parser it allowed for rapid development as there was no confusion about the abilities of the tool. It was also possible to add measurements to the tool no learning curve, which was necessary due to the limited timeframe of this research.
 
 \section{Results}\label{results}
 

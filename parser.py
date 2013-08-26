@@ -95,17 +95,48 @@ class MeanTransferCollector(Collector):
         return "{:.3f}kB".format(self.running_average / 1000)
 
 
+class MedianTransferCollector(Collector):
+    name = "Median_Transfer"
+
+    def __init__(self):
+        self.transfers = []
+
+    def on_access(self, data):
+        if data['size'] == '-':
+            size = 0
+        else:
+            size = int(data['size'])
+        self.transfers.append(size)
+
+    def report(self):
+        def median(sizes):
+            sortd = sorted(sizes)
+            length = len(sortd)
+            if not length % 2:
+                return (sortd[length // 2] + sortd[length // 2 - 1]) / 2
+            return sortd[length // 2]
+        return "{}kB".format(median(self.transfers))
+
+
 class FileCollector(Collector):
     name = "Files"
 
     def __init__(self):
         self.files = {}
+        self.filesize = {}
 
     def on_access(self, data):
         file = data['request']['resource']
         if file not in self.files:
             self.files[file] = 0
+            self.filesize[file] = 0
         self.files[file] += 1
+        if data['size'] == '-':
+            size = 0
+        else:
+            size = int(data['size'])
+        if self.filesize[file] < size:
+            self.filesize[file] = size
 
 
 class OneTimeReferenceCollector(Collector):
@@ -134,13 +165,14 @@ class ReferenceConcentrationCollector(Collector):
 
     def print_graph_data(self, separator):
         files = self.fileCollector.files
-        headers = ("Document Rank", "Accesses to document")
+        filesizes = self.fileCollector.filesize
+        headers = ("Document Rank", "Accesses to document", "Document filesize")
         print()
         print(self.name)
         print()
         print(separator.join(headers))
         for file, count in sorted(files.items(), key=lambda x: -x[1]):  # -x[0] to make sorted return largest to smallest
-            print(separator.join((file, str(count))))
+            print(separator.join((file, str(count), str(filesizes[file]))))
 
 
 class AccessTimeCollector(Collector):
@@ -265,20 +297,19 @@ class Parser(object):
             }
             for i, line in enumerate(f):
                 line = line.strip()
-                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
+                raw_parts = re.match(r'(\S+)\s+(\S+)\s+([^\[]+?)?\s*\[([^\]]+)\]\s+(".+")\s+(\S+)\s+(\S+)', line)
                 if not raw_parts:
-                    print("{}: Unable to parse request: {}".format(i, line))
+                    print("{}: Unable to parse request: {}".format(i, line), file=sys.stderr)
+                    continue
                 try:
                     request = {}
                     try:
-                        # raw_timestamp = "{} {}".format(raw_parts[3][1:], raw_parts[4][:-1])
-                        raw_timestamp = raw_parts.group(groups['timestamp'])
-                        request_matches = re.match(r'"([A-Z]+)\s+([^\s]+)\s*([^"]*)"', raw_parts.group(groups['request']))
+                        request_matches = re.match(r'"([A-Z]+)\s+(.*?)(?:"|\s+(.*)")', raw_parts.group(groups['request']))
                         if request_matches:
                             raw_request = request_matches.group(0)
                             request.update({
                                 'type': request_matches.group(1),
-                                'resource': request_matches.group(2),
+                                'resource': request_matches.group(2).replace(" ", "_"),
                                 'protocol': request_matches.group(3)
                             })
                         else:
@@ -289,6 +320,7 @@ class Parser(object):
                         print("IndexError :(", file=sys.stderr)
                         continue
 
+                    raw_timestamp = raw_parts.group(groups['timestamp'])
                     timestamp = timestamp_cache.get(raw_timestamp, None)
                     if not timestamp:
                         timestamp = datetime.strptime(raw_timestamp, "%d/%b/%Y:%H:%M:%S %z")
@@ -328,6 +360,7 @@ if __name__ == '__main__':
     parser.add_collector(IpCollector())
     parser.add_collector(SuccessCollector())
     parser.add_collector(MeanTransferCollector())
+    parser.add_collector(MedianTransferCollector())
     parser.add_collector(ProgressReporter())
     parser.add_collector(OneTimeReferenceCollector())
     parser.add_collector(CacheCollector())
