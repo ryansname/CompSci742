@@ -88,6 +88,24 @@ To record the results we used a custom parser written in python. By custom writi
 
 \section{Results}\label{results}
 
+\begin{table}
+    \caption{Access Log Characteristics}
+    \begin{tabular}[ht!]{ | l || c | c | c | }
+        \hline
+        Invariant & Calgary & Saskatchewan & Conference \\
+        \hline
+        Unique IPs & 2* & 162512 & 130400 \\
+        Success Rate & 96.07\% & 99.06\% & 96.78\% \\
+        Mean Transfer & 10.9kB & 5.4kB & 23.0kB \\
+        Median Transfer & 1697kB & 1712kB & 15015kB \\
+        One Time Referencing & 32.4\% & 59.95\% & 43.27\% \\
+        Cache Hit Rate & 13.5\% & 6.3\% & 16.3\% \\
+        Cache Bytes Saved & 781MB & 525MB & 34.8GB \\
+        Total Bytes Transferred & 7946MB & 13GB & 232GB \\
+        \hline
+    \end{tabular}
+\end{table}
+
 \begin{figure}
     \includegraphics{images/filesize}
     \caption{Hi}\label{fig:filesize}
