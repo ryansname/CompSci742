@@ -39,7 +39,7 @@ Williams et al. \cite{williams05} produced an analysis of Web server logs from 2
 
 In 2007, Gill et al. \cite{youtube} analysed YouTube usage on the University of Calgary network and collected statistics on global video popularity. The aim of this study was to investigate Web 2.0 workload characteristics to allow for improvements in network management, capacity planning and the design of new systems. Web 2.0 marks a shift towards user generated content and with it comes a plethora of metadata. It was found that although the concentration of references was reduced from that of traditional Web workloads \cite{keynote}, metadata should be used to improve the effectiveness of caching.
 
-Cherkasova and Gupta \cite{Cherkasova} investigated client access patterns, media server access trends, and the evolution of media on websites over time. Their research was split into static and temporal analysis of the data. They looked at the locality of accesses, which was similar to that of a Web server with 14\%-30\% of the server files accounting for 90\% of media sessions, and 92\%-94\% of the bytes transferred. Additionally, 16\%-19\% of files were accessed only once, and the first five weeks of a file’s existence account for 70\%-80\% of its total accesses. They also looked into the trends associated with media session lengths, and the behaviour of clients with incomplete sessions. Their research concentrated on comparing media server workloads with traditional web server workloads.
+Cherkasova and Gupta \cite{Cherkasova} investigated client access patterns, media server access trends, and the evolution of media on websites over time. Their research was split into static and temporal analysis of the data. They looked at the locality of accesses, which was similar to that of a Web server with 14\%-30\% of the server files accounting for 90\% of media sessions, and 92\%-94\% of the bytes transferred. Additionally, 16\%-19\% of files were accessed only once, and the first five weeks of a file's existence account for 70\%-80\% of its total accesses. They also looked into the trends associated with media session lengths, and the behaviour of clients with incomplete sessions. Their research concentrated on comparing media server workloads with traditional web server workloads.
 
 In 2002, Bai and Williamson \cite{Bai} analysed the request arrival rate at each level of a multi-layer web proxy caching hierarchy using trace-driven simulation and artificial web workloads. The presence of a Web proxy cache means that requests are removed from the Web server request stream when there is a cache hit at the proxy. The results showed that there was a decrease in the peak and mean request arrival rates in the presence of a multi-layer web caching hierarchy. However, they also noted that the burstiness of request arrivals may vary or stay the same. They discovered that a gamma distribution may be used to model the arrival of requests in a web caching hierarchy.
 
@@ -52,7 +52,7 @@ In 2012, Tantithamthavorn and Rungsawang \cite{facebook} conducted a study on Fa
 This paper aims to further contribute to the understanding of workload characteristics and examine how they are applicable to practical situations. In particular, we will examine potential areas where caching could be optimised to provide better performance.
 
 \begin{table*}
-    \caption{Comparison of Workload Characteristics Common to Internet Web Servers}
+    \caption{Comparison of Workload Characteristics Common to Internet Web Servers}\label{tab:characteristics}
     \begin{tabular}{| l || l | l | l |}
         \hline
         Invariant & Arlitt and Williamson (1996) & Faber et al. & Conference Dataset\\
@@ -131,7 +131,7 @@ To record the results we used a custom parser written in python. By custom writi
 
 \subsection{Success Rate} % (fold)
 \label{sub:success_rate}
-For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
+For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary's department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
 % subsection success_rate (end)
 
 \begin{figure*}
@@ -232,7 +232,7 @@ Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very 
 \label{sub:caching}
 We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set. We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the conference data set. These results are summarised in the table \ref{tab:characteristics}.
 
-Over the time period that each data set was logged, we calculated the total bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth saved from 7.9GB for the Calgary server, 525MB of bandwidth saved from 13GB for the Saskatchewan server and 34.8GB of bandwidth from 232GB for the conference server.
+Over the time period that each data set was logged, we calculated the total bytes saved by caching that the server didn't need to transfer. This came to a total of 781MB of bandwidth saved from 7.9GB for the Calgary server, 525MB of bandwidth saved from 13GB for the Saskatchewan server and 34.8GB of bandwidth from 232GB for the conference server.
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
@@ -251,6 +251,10 @@ We observed no diurnal behaviour on the conference Web server. We believed this 
 Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimised to save bandwidth and resources for both the server and the requesting client.
 
 \section{Conclusions and Future Work}\label{conclusions}
+This study has presented a workload analysis of three different server logs. The logs studied were from: The University of Calgary's Department of Computer Science; the campus wide server at The University of Saskatchewan and the server hosting the  academic conference Web site WWW2007.
+
+Using these logs we re-examined seven characteristics from Arlitt and Williamson's study \cite{keynote} and also identified two new characteristics to analyse. We have presented a comparison of these characteristics in Table \ref{tab:characteristics}. From our results we identified
+
 This study was not comprehensive and is meant as a basis from which further analysis can be carried out. Non-academic site is an area that would be of interest for continued study of the invariants.
 We also identified that due to the static nature of images it would be possible to cache them for an extended period of time without risking cache inconsistency.
 
