@@ -51,6 +51,26 @@ In 2012, Tantithamthavorn and Rungsawang \cite{facebook} conducted a study on Fa
 
 This paper aims to further contribute to the understanding of workload characteristics and examine how they are applicable to practical situations. In particular, we will examine potential areas where caching could be optimised to provide better performance.
 
+\begin{table*}
+    \caption{Comparison of Workload Characteristics Common to Internet Web Servers}
+    \begin{tabular}{| l || l | l | l |}
+        \hline
+        Invariant & Arlitt and Williamson (1996) & Faber et al. & Conference Dataset\\
+        \hline
+        Success Rate & 97.25\% &  & 9678\%\\
+        File Types & HTML + Images = 90\% of documents & HTML + Images = 60-80\% & HTML + Images = 70\%\\
+        File Size & Pareto with $0.4 < \alpha < 0.63$ & log-normal &  \\
+        One Time Referencing & 23-42\% of files & 65-82\% of files & 32-60\% of files\\
+        Concentration of References & 10\% of files is 90\% of requests & 10\% of files is $>$ 80\% of files & 10\% of files is 96\% of requests\\
+        Weekday vs Weekend & Average 64\% of requests on weekdays & $>$ 74\% of requests on weekdays & 62\% of requests on weekdays\\
+        Diurnal Usage & Diurnal & Usage is heavier during the day & Two peaks each day\\
+        Cache Hit Rate & 6.3-13.5\%* &  & 16.3\%\\
+        Cache Effectiveness & 4-10\%* &  & 15\%\\
+        \hline
+    \end{tabular}
+    \caption*{*These values were taken from our analysis of the Calgary and Saskatchewan datasets}
+\end{table*}
+
 \section{Methodology}\label{methodology}
 \subsection{Characteristics}\label{lab:characteristics}
 In this study, we have chosen to examine five of the characteristics identified by Arlitt and Williamson \cite{keynote}: the success rate, file types, file size distribution, one time referencing, and the concentration of references. We also look into two of the invariants found by Faber et al. \cite{Faber}: weekday versus weekend usage and diurnal usage. Finally, we add two original invariants: cache hit rate, and the effectiveness of caching.
@@ -143,7 +163,7 @@ The document type analysis revealed an interesting difference between the 2006-2
 \end{table}
 Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three datasets.
 
-Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of requests received by servers in all the logs we analysed. The Conference dataset showed the most concentration and the other two datasets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by Mahanti et al.\cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
+Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of requests received by servers in all the logs we analysed. The conference dataset showed the most concentration and the other two datasets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by Mahanti et al.\cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
 % subsection concentration_of_references (end)
 
 \subsection{One Time Referencing} % (fold)
@@ -164,7 +184,7 @@ Our results for one time referencing shows an outcome which lies in between the 
 \label{sub:file_size_distribution}
 Figure \ref{fig:filesize} shows the file size distribution of the distinct files transferred by each site. As observed at the lower end of the graph for each server log, they all have a very few small files (less than 100 bytes). The majority of the files seem to be in the range of 100 - 100,000 bytes, while a few files are larger than 100,000 bytes. This file size distribution is consistent with results reported by other studies \cite{keynote, Braun}.
 
-A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and is confirmed in all three of our data sets.
+A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In other words, a heavy tail in a web file size distribution means that there are elephants, outliers, in the tail of the distribution. Although small in number, they are large enough to significantly affect the total traffic studied. The Pareto distribution \cite{Kotz}, can be observed in this file size distribution, for \begin{math} \alpha < 1\end{math}. The study by Crovella et al. \cite{Crovella} noted this observation and it is confirmed by all three of our data sets.
 % subsection file_size_distribution (end)
 
 \begin{figure*}
@@ -183,7 +203,7 @@ A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In
         \includegraphics[width=\textwidth]{images/usasktime}
         \caption{}\label{fig:usask}
     \end{subfigure}
-    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) Conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
+    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
 \end{figure*}
 
 \subsection{Weekday vs Weekend} % (fold)
@@ -199,7 +219,8 @@ A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In
     \end{tabular}
 \end{table}
 
-We examined the access time of our data sets and their trends throughout the week. The Calgary and Saskatchewan servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website was not nearly as significant. The percentage of weekend accesses at Saskatchewan are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and Saskatchewan show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
+We examined the access time of our data sets and their trends throughout the week. The Calgary and Saskatchewan servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website was not nearly as significant. The percentage of weekend accesses at Saskatchewan are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and Saskatchewan show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. 
+The average percentage of usage from Monday to Friday on the Calgary and University of Saskatchewan servers is 63.85\%, slightly above the 61.6\% of the conference website. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
 % subsection weekday_vs_weekend (end)
 
 \subsection{Daytime versus nighttime usage} % (fold)
@@ -209,7 +230,7 @@ Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very 
 
 \subsection{Caching} % (fold)
 \label{sub:caching}
-We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set. We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the Conference data set. These results are summarised in the table \ref{tab:characteristics}.
+We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set. We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the conference data set. These results are summarised in the table \ref{tab:characteristics}.
 
 Over the time period that each data set was logged, we calculated the total bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth saved from 7.9GB for the Calgary server, 525MB of bandwidth saved from 13GB for the Saskatchewan server and 34.8GB of bandwidth from 232GB for the conference server.
 % subsection caching (end)
