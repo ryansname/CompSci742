@@ -142,6 +142,11 @@ To record the results we used a custom parser written in python. By custom writi
     \caption{Distribution of document types}\label{fig:file_types}
 \end{figure*}
 
+\subsection{Success Rate} % (fold)
+\label{sub:success_rate}
+For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. It is significantly higher than the 90.63\% average success rate between the four logs used in [faber, gupta, viecco]. We believe that this result aligns strongly with the the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to clients have not changed, and remain highly reliable. The conference web server has a far greater total transfer size than the Calgary and University of Saskatchewan servers, with a median transfer size of 877\% that of the University of Saskatchewan server’s. We believe that 
+% subsection success_rate (end)
+
 \subsection{Document Types}\label{sub:doc_types}
 We decided to analyse the number of times different file types were accessed and present these as a fraction of the total number of file accesses. We categorised files into HTML, images, web, video, audio, document and other. We defined the web category as files with the extensions \texttt{.css}, \texttt{.js}, \texttt{.cfm}, \texttt{.php}, \texttt{.asp}, \texttt{.aspx} and \texttt{.xml}. We also defined other as any files which were of an unknown type. We expected this to be useful characteristic to analyse as it allows us to see trends in what files are being accessed. The results of this analysis across all three Web servers are shown in Figure \ref{fig:file_types}.
 
