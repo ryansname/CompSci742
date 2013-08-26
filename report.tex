@@ -87,13 +87,17 @@ To record the results we used a custom parser written in python. By custom writi
 
 \section{Results}\label{results}
 
+\begin{figure}[t]
+    \includegraphics{images/filesize}
+    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
+\end{figure}
+
 \begin{table}
     \caption{Access Log Characteristics}\label{tab:characteristics}
     \begin{tabular}[ht!]{ | l || c | c | c | }
         \hline
         Invariant & Calgary & Saskatchewan & Conference \\
         \hline
-        Unique IPs & 2* & 162512 & 130400 \\
         Success Rate & 96.07\% & 99.06\% & 96.78\% \\
         Mean Transfer & 10.9kB & 5.4kB & 23.0kB \\
         Median Transfer & 1697kB & 1712kB & 15015kB \\
@@ -105,12 +109,7 @@ To record the results we used a custom parser written in python. By custom writi
     \end{tabular}
 \end{table}
 
-\begin{figure}
-    \includegraphics{images/filesize}
-    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
-\end{figure}
-
-\begin{figure}
+\begin{figure}[t]
     \includegraphics{images/concentration}
     \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
 \end{figure}
@@ -141,7 +140,7 @@ To record the results we used a custom parser written in python. By custom writi
 
 \subsection{Success Rate} % (fold)
 \label{sub:success_rate}
-For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. It is significantly higher than the 90.63\% average success rate between the four logs used in [faber, gupta, viecco]. We believe that this result aligns strongly with the the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to clients have not changed, and remain highly reliable. The conference web server has a far greater total transfer size than the Calgary and University of Saskatchewan servers, with a median transfer size of 877\% that of the University of Saskatchewan server’s. We believe that 
+For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
 % subsection success_rate (end)
 
 \subsection{Document Types}\label{sub:doc_types}
@@ -216,7 +215,7 @@ Data gathered about file caching on HTTP servers is useful as it can be applied 
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
-Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \ref{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
+Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \cite{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
 
 \section{Conclusions and Future Work}\label{conclusions}
 
