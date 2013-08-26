@@ -90,7 +90,7 @@ To record the results we used a custom parser written in python. By custom writi
 \section{Results}\label{results}
 
 \begin{table}
-    \caption{Access Log Characteristics}
+    \caption{Access Log Characteristics}\label{tab:characteristics}
     \begin{tabular}[ht!]{ | l || c | c | c | }
         \hline
         Invariant & Calgary & Saskatchewan & Conference \\
@@ -109,35 +109,36 @@ To record the results we used a custom parser written in python. By custom writi
 
 \begin{figure}
     \includegraphics{images/filesize}
-    \caption{Hi}\label{fig:filesize}
+    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
 \end{figure}
 
 \begin{figure}
     \includegraphics{images/concentration}
-    \caption{Hi}\label{fig:file_accesses}
+    \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
 \end{figure}
 
-\begin{figure*}{}
+\begin{figure*}
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{images/calgarytime}
-        \caption{Hi}\label{fig:file_accesses}
+        \caption{}\label{fig:calgary}
     \end{subfigure}
 \qquad
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{images/conferencetime}
-        \caption{Hi}\label{fig:file_accesses}
+        \caption{}\label{fig:conference}
     \end{subfigure}
 
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{images/usasktime}
-        \caption{Hi}\label{fig:file_accesses}
+        \caption{}\label{fig:usask}
     \end{subfigure}
+    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) Conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
 \end{figure*}
 
 \begin{figure*}
     \includegraphics{images/filetype}
-    \caption{Hi}\label{fig:file_types}
+    \caption{Distribution of document types}\label{fig:file_types}
 \end{figure*}
 
 \subsection{Document Types}\label{sub:doc_types}
