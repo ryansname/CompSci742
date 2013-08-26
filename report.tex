@@ -50,47 +50,49 @@ This paper aims to further contribute to the understanding of workload character
 
 \section{Methodology}\label{methodology}
 \subsection{Characteristics}\label{lab:characteristics}
-In this study, we have chosen to examine five of the characteristics identified by Arlitt and Williamson \cite{keynote}: the success rate, file types, file size distribution, one time referencing, and the concentration of references. We also look into two of the invariants found by Faber et al. \cite{Faber}: weekday versus weekend usage and diurnal usage. Finally, we add two original invariants: cache rate, and the effectiveness of caching.
+In this study, we have chosen to examine five of the characteristics identified by Arlitt and Williamson \cite{keynote}: the success rate, file types, file size distribution, one time referencing, and the concentration of references. We also look into two of the invariants found by Faber et al. \cite{Faber}: weekday versus weekend usage and diurnal usage. Finally, we add two original invariants: cache hit rate, and the effectiveness of caching.
 
-The success rate looks at the occurrence of successful, found, and not modified status codes on requests to each of the three web servers. Size distribution examines the trend in the sizes of files on each of the three data sets. One time referencing looks at the percentage of files and bytes that are requested only once in the logged period, while the concentration of references is a measurement of the frequency of distinct file accesses. We compare the usage of these sites between weekdays and weekends, and also between daytime and nighttime. Cache rate looks at the ratio of number of accesses of a file, and the number of times it was cached, while the effectiveness of caching refers to the amount of bandwidth saved with caching.
+The success rate looks at the occurrence of successful, found, and not modified status codes of requests to each of the three web servers. Size distribution examines the trend in the sizes of files across each of the three data sets. One time referencing looks at the percentage of files and bytes that are requested only once in the logged period, while the concentration of references is a measurement of the frequency of distinct file accesses. We compare the usage of these sites during weekdays and weekends, and also during daytime and nighttime.
+Cache hit rate looks at the ratio of number of accesses to a file compared to the number of times it was cached. While the effectiveness of caching refers to the amount of bandwidth saved with caching.
 
 \subsection{Metrics}
 To determine which characteristics from section \ref{lab:characteristics} were present we decided on the following metrics:
 \begin{itemize}[noitemsep]
-    \item Unique IP addresses
     \item Number of times each status code appears
     \item Number of times each file is accessed
-    \item Number of bytes saved via caching
-    \item Number of bytes transferred
-    \item The time each file is requested
+    \item Size of each file transferred
+    \item Total number of bytes transferred
+    \item The time each file is accessed
 \end{itemize}
 
-\subsection{Unique IP Addresses}
-Unique IP addresses is a count of how many unique IP addressess accessed each site. This metric allowed us to give an estimate of how many people were accessing the website. 
-
-\subsection{Number of times each status code appears}
+\subsubsection{Number of times each status code appears}
 We recorded a count of each status code or range of status codes so that we could characterise both success rate and caching.
 The number of successful requests is the total number of requests that had the status code of either 2xx (Success) or 3xx (Redirection). This allows us to characterise the workloads based on percentage of successful requests.
-We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterize the effectiveness of caching on number of requests.
+We also were able to see how many requests were cached by the client based on the count of 304 (Not Modified) status codes in the logs. Counting the number of 304 statuses compared to the total number of requests allows us to characterize the effectiveness of caching.
 
-\subsection{Number of times each file is accessed}
+\subsubsection{Number of times each file is accessed}
 This metric is a count of each access to a particular resource.
-This measurements of this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only a single time.
+The measurements produced by this metric show how concentrated the requests are in terms of which files are the most popular and would benefit from higher availablility. In addition this metric will show the number of files accessed only once.
 
-\subsection{Number of bytes transferred}
+\subsubsection{Size of each file transferred}
 This metric gathers the size of each file that is transferred. We used it to calculate the mean and median size for each request. 
 It also allowed us to calculate the bandwidth savings from client side caching by combining this metric with the status codes collected.
 
-\subsection{Number of bytes transferred}
+\subsubsection{Total number of bytes transferred}
 This metric simply totalled up the total bandwidth used over the logging period. It allowed us to see the relative effect of caching when comparing the two datasets of different sizes.
 
-\subsection{The time each file is accessed}
-We also recorded the time of each file access binned into hourly bins. This metric allowed us to plot the number of accesses over time to see if the workload is still following a diurnal pattern. It also allowed for comparison between the weekday and weekend workload.
+\subsubsection{The time each file is accessed}
+We also recorded the time of each file access. This metric allowed us to plot the number of accesses over time to see if the workload is still following a diurnal pattern. It also allowed for comparison between the weekday and weekend workload.
 
 \subsection{Tools}
-To record the results we used a custom parser written in python. By custom writing the parser it allowed for rapid development as there was no confusion about the abilities of the tool. It was also possible to add measurements to the tool no learning curve, which was necessary due to the limited timeframe of this research.
+To record the results we used a custom parser written in python. By custom writing the parser it allowed for rapid development as there was no confusion about the abilities of the tool. It was also possible to add measurements to the tool with no learning curve, which was necessary due to the limited timeframe of this research.
 
 \section{Results}\label{results}
+
+\begin{figure}[t]
+    \includegraphics{images/filesize}
+    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
+\end{figure}
 
 \begin{table}
     \caption{Access Log Characteristics}\label{tab:characteristics}
@@ -98,7 +100,6 @@ To record the results we used a custom parser written in python. By custom writi
         \hline
         Invariant & Calgary & Saskatchewan & Conference \\
         \hline
-        Unique IPs & 2* & 162512 & 130400 \\
         Success Rate & 96.07\% & 99.06\% & 96.78\% \\
         Mean Transfer & 10.9kB & 5.4kB & 23.0kB \\
         Median Transfer & 1697kB & 1712kB & 15015kB \\
@@ -110,12 +111,7 @@ To record the results we used a custom parser written in python. By custom writi
     \end{tabular}
 \end{table}
 
-\begin{figure}
-    \includegraphics{images/filesize}
-    \caption{Frequency of filesizes for files requested}\label{fig:filesize}
-\end{figure}
-
-\begin{figure}
+\begin{figure}[t]
     \includegraphics{images/concentration}
     \caption{Cumulative accesses to file vs file rank}\label{fig:file_accesses}
 \end{figure}
@@ -144,10 +140,15 @@ To record the results we used a custom parser written in python. By custom writi
     \caption{Distribution of document types}\label{fig:file_types}
 \end{figure*}
 
+\subsection{Success Rate} % (fold)
+\label{sub:success_rate}
+For this invariant, we consider all 2XX and 3XX status code responses successful. This includes all of the successful, found, and not modified status codes that were examined separately on prior workload studies \cite{keynote, Faber}. The conference server log has a success rate very similar to that of Calgary’s department server log, and is 2.28\% lower than that of the University of Saskatchewan log. The success rate of the conference website strongly aligns with those from the original study by Arlitt and Williamson \cite{keynote}, and is an affirmation that the ability of web servers to respond to client requests have not changed and remain as reliable as they have been through the years. This observation may, however, only apply to academic websites as the average success rate between the four logs used in \cite{keynote, Faber} is 90.63\%. The scientific websites used in their study show a significantly higher failure rate, which suggest that the invariants may not hold true in the context of scientific sites.
+% subsection success_rate (end)
+
 \subsection{Document Types}\label{sub:doc_types}
 We decided to analyse the number of times different file types were accessed and present these as a fraction of the total number of file accesses. We categorised files into HTML, images, web, video, audio, document and other. We defined the web category as files with the extensions \texttt{.css}, \texttt{.js}, \texttt{.cfm}, \texttt{.php}, \texttt{.asp}, \texttt{.aspx} and \texttt{.xml}. We also defined other as any files which were of an unknown type. We expected this to be useful characteristic to analyse as it allows us to see trends in what files are being accessed. The results of this analysis across all three Web servers are shown in Figure \ref{fig:file_types}.
 
-The document type analysis revealed an interesting difference between the more 2006-2007 log and the 1994-1995 logs. We can see that in the 1994-1995 logs, HTML were the most accessed documents excluding documents of an unknown type. This observation is consistent with results obtained by Arlitt and Williamson \cite{keynote}. However, we can see that in the 2006-2007 log only a small fraction of the files accessed were HTML files. We can also note that in the 2006-2007 log, there were substantially more requests for images and Web file types than in the 1994-1995 logs. We have attributed this to increasing network bandwidth and advancements in the technology available for Web development.
+The document type analysis revealed an interesting difference between the 2006-2007 log and the 1994-1995 logs. We can see that in the 1994-1995 logs, HTML was the most accessed document excluding documents of an unknown type. This observation is consistent with results obtained by Arlitt and Williamson \cite{keynote}. However, we can see that in the 2006-2007 log only a small fraction of the files accessed were HTML files. We can also note that in the 2006-2007 log, there were substantially more requests for images and Web file types than in the 1994-1995 logs. We have attributed this to increasing network bandwidth and advancements in the technology available for Web development.
 
 \subsection{Concentration of References} % (fold)
 \label{sub:concentration_of_references}
@@ -161,9 +162,9 @@ The document type analysis revealed an interesting difference between the more 2
         Conference & 95.9\%
     \end{tabular}
 \end{table}
-Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files into an order by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three datasets.
+Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three datasets.
 
-Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of all requests received by servers in all the logs we analysed. The Conference dataset showed the most concentration and the other two datasets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by \cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
+Table \ref{tab:conc_references} shows that 10\% of all distinct documents were responsible for 84 - 96\% of requests received by servers in all the logs we analysed. The Conference dataset showed the most concentration and the other two datasets from Calgary and Saskatchewan showed similar but lower concentrations. Nevertheless all the data sets show similar trait in concentration of references. Another study by Mahanti et al.\cite{Mahanti} showed similar results and conclusion. This concentration aspect is another invariant of web workload characteristic in our server logs.
 % subsection concentration_of_references (end)
 
 \subsection{One Time Referencing} % (fold)
@@ -187,36 +188,36 @@ A trait we can see from the figure is that it is heavy-tailed. In other words, a
 \subsection{Weekday vs Weekend} % (fold)
 \label{sub:weekday_vs_weekend}
 \begin{table}[h]
-    \caption{Average weekday and weekend usage}\label{tab:weeklyusage}
+    \caption{Average weekday and weekend usage per day}\label{tab:weeklyusage}
     \begin{tabular}{l | c c}
         Log & Average Weekday Usage & Average Weekend Usage\\
         \hline
-        Calgary & 65.4\% & 34.6\%\\
-        Saskatchewan & 62.3\% & 37.7\%\\
-        Conference & 61.6\% & 38.4\%
+        Calgary & 119699 & 63207\\
+        Saskatchewan & 387829 & 234720\\
+        Conference & 1617134 & 1008210
     \end{tabular}
 \end{table}
 
-We examined the access time of our data sets and their trends throughout the week. The department and campus-wide servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website-  was not nearly as significant. The percentage of weekend accesses at USask are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and USask show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
+We examined the access time of our data sets and their trends throughout the week. The Calgary and Saskatchewan servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website-  was not nearly as significant. The percentage of weekend accesses at Saskatchewan are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and Saskatchewan show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
 % subsection weekday_vs_weekend (end)
 
 \subsection{Daytime versus nighttime usage} % (fold)
 \label{sub:daytime_versus_nighttime_usage}
-Daytime versus nighttime usage in the department and campus-wide servers are very different. Usage at night remains relatively the same throughout the week with the lowest points between 0:00 and 6:00. Daytime usage peaks between 12:00 and 15:00 each day, and form a platform around 18:00, after which usage drops steeply.  This platform is seen more clearly on the campus-wide server than the department server, and can be observed over the weekend on the campus-wide server. This observation is less obvious in the conference log. The conference log has an additional peak on each day of the week between 0:00 and 6:00 instead of a low. There is a less obvious diurnal pattern in the weekdays with the lowest point just short of 0:00, and absolutely no diurnal pattern in the weekend, aligning with a previous study by Mahanti et al. \cite{Mahanti_Wu}. However there is clearly still a significant drop between 12:00 and 18:00 on each day between Monday and Saturday. 
+Daytime versus nighttime usage in the Calgary and Saskatchewan servers are very different. Usage at night remains relatively the same throughout the week with the lowest points between 0:00 and 6:00. Daytime usage peaks between 12:00 and 15:00 each day, and form a platform around 18:00, after which usage drops steeply.  This platform is seen more clearly on the Saskatchewan server than the Calgary server, and can be observed over the weekend on the Saskatchewan server. This observation is less obvious in the conference log. The conference log has an additional peak on each day of the week between 0:00 and 6:00 instead of a low. There is a less obvious diurnal pattern in the weekdays with the lowest point just short of 0:00, and absolutely no diurnal pattern in the weekend, aligning with a previous study by Mahanti et al. \cite{Mahanti_Wu}. However there is clearly still a significant drop between 12:00 and 18:00 on each day between Monday and Saturday. 
 % subsection daytime_versus_nighttime_usage (end)
 
 \subsection{Caching} % (fold)
 \label{sub:caching}
-We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set . We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the Conference data set. These results are summarized in the table \ref{tab:characteristics}.
+We looked at the HTTP status codes of requests within the three data sets and calculated the percentage of HTTP requests with a 304 (Not Modified) status code for each data set. We found the percentage of 304 status codes contribute 6.3\% of the total requests for the Saskatchewan data set, 13.5\% of the total requests for the Calgary data set, and 16.3\% of the total requests for the Conference data set. These results are summarised in the table \ref{tab:characteristics}.
 
-Over the time period that each data set was logged, we calculated the total  Bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth for the Calgary server, 525MB of bandwidth for the Saskatchewan server and 34.8GB of bandwidth for the conference server.
+Over the time period that each data set was logged, we calculated the total bytes saved by caching that the server didn’t need to transfer. This came to a total of 781MB of bandwidth saved from 7.9GB for the Calgary server, 525MB of bandwidth saved from 13GB for the Saskatchewan server and 34.8GB of bandwidth from 232GB for the conference server.
 
 Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimized to save bandwidth and resources for both the server and the requesting client.
 
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
-Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \ref{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
+Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \cite{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
 
 \section{Conclusions and Future Work}\label{conclusions}
 
