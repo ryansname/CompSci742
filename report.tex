@@ -158,7 +158,6 @@ The document type analysis revealed an interesting difference between the more 2
         Saskatchewan & 95.8\%\\
         Conference & 95.9\%
     \end{tabular}
-    }
 \end{table}
 Each server contains many different documents, and they certainly are not created equal; some files are in demand and some are rarely accessed. Users may demand certain files over others and access them at shorter intervals. Whereas other files are accessed rarely, if at all, thus accessed with longer intervals. We use concentration, a term which we use to define a non-uniform referencing behaviour, by first sorting the list of all distinct files into an order by the number of times they were accessed in decreasing order. Afterwards, we plot the results using cumulative file accesses against the document ranking. Figure \ref{fig:file_accesses} shows the resulting plot for the three datasets.
 
@@ -194,7 +193,6 @@ A trait we can see from the figure is that it is heavy-tailed. In other words, a
         Saskatchewan & 62.3\% & 37.7\%\\
         Conference & 61.6\% & 38.4\%
     \end{tabular}
-    }
 \end{table}
 
 We examined the access time of our data sets and their trends throughout the week. The department and campus-wide servers clearly show a dramatic decrease in average weekend access (63k) compared to weekday (120k), while the decrease on weekend traffic on the conference website-  was not nearly as significant. The percentage of weekend accesses at USask are more similar to the percentage of conference website accesses than that of the Calgary site. Each of Calgary and USask show a peak in weekday traffic around the middle of the week (Tuesday and Thursday respectively), while the conference website shows a drop from Monday to Wednesday, with the highest peak of the weekday on Thursday. Additionally, the conference website shows a positive trend on the weekend, starting from the lowest point of the week on Saturday, up to the regular weekday volume. We suspect that the increase in weekend traffic as a percentage of total traffic in the newest data set is due to computers and mobile devices being more readily available today.
@@ -216,7 +214,7 @@ Data gathered about file caching on HTTP servers is useful as it can be applied 
 % subsection caching (end)
 
 \section{Discussion}\label{discussion}
-
+Our analysis on document types revealed that in the conference Web server logs, approximately 65\% of requests were for images. This has practical uses as images are less likely to be changed than textual content. Therefore, there could be improvements made in caching architectures such that images have longer time to live values than other document types. This discovery aligns with a study by Gwertzman and Seltzer \cite{Gwertzman} which found that a conservative estimate for an image lifespan is 85-100 days. Additionally, due to the small size of images they are feasible to cache. As the percentage of requests for images has increased since the original study by Arlitt and Williamson \ref{invariants} as shown by figure \ref{fig:file_types}, the caching of images could greatly improve the performance of the Web.
 
 \section{Conclusions and Future Work}\label{conclusions}
 
