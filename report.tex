@@ -217,7 +217,7 @@ Our analysis on document types revealed that in the conference Web server logs, 
 
 Our analysis showed that references are still highly concentrated. This can be used by Web server admins as an incentive to cache their most common files. This is because caching only 10\% of their files on high speed storage would increase the speed of 90\% of their incoming requests. Unfortunately this cannot be a one size fits all approach as there are many Web sites that dynamically create their webpages from templates where pages returned from the same website address are different and simply caching the page would not be trivial.
 
-As stated in the study from \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
+As stated in the study by Arlitt and Williamson \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
 
 From the results you can see that trend for file size distribution is the same for all datasets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the filesize remains relatively constant. This is useful as browers are able to make multiple requests to the same Web server to request multiple different files in parallel.
 
