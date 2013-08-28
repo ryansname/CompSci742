@@ -2,6 +2,7 @@
 \let\labelindent\relax
 \usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 \usepackage{subcaption}
 \usepackage{url}
 
@@ -9,7 +10,7 @@
 \bibliography{references.bib}
 
 \title{The Evolution of Workload Characteristics}
-\author{\IEEEauthorblockN{Chelsea Farley, Ryan Lewis, David Armstrong, Rina Gao and Ryunosuke Madenokoji}
+\author{\IEEEauthorblockN{David Armstrong (darm230), Chelsea Farley (cfar030), \\Rina Gao (rgao005), Ryan Lewis (rlew036) and Ryunosuke Madenokoji (rmad019)}
 \IEEEauthorblockA{The University of Auckland}}
 \date{Today}
 
@@ -24,6 +25,8 @@ The overall traffic volume on the Web is continually growing as is user expectat
 There has been an increase in the overall traffic volume on the Web. The rate of increase of data traffic has been shown to follow Moore's law \cite{williams05}. Moore's law as it pertains to data traffic, states that the overall traffic volume will double annually. This property of data traffic means that the scalability of the Web is more important than ever. Additionally, the time an average user will wait for a page to load has decreased from eight seconds in 2000 to three seconds in 2009 \cite{Butkiewicz}. Therefore, it is becoming paramount that optimisations are made to improve Web performance.
 
 In order to improve the performance and scalability of the Web, we must first develop an understanding of current Web workload characteristics and how they have changed over time. An understanding of the evolution of workload characteristics is vital in the development of effective caching architectures which, in turn, leads to improved performance. Additionally, workload analysis can aid in capacity planning, generating workload-generating models and network administration. Therefore, the purpose of this paper is to revisit several of the invariants identified by Arlitt and Williamson \cite{keynote} and evaluate whether they are applicable to a more recent Web server log. We will be analysing two of the Web server logs used in Arlitt and Williamson's original study: a departmental-level Web server at the University of Calgary and a campus-wide Web server at the University of Saskatchewan \cite{keynote}. Our more recent Web server log has data that was collected over a one year period between 2006 and 2007 from an academic conference Web site.
+
+The study examines how caching interacts with five of the characteristics described by Arlitt and Williamson \cite{keynote}. It proposes a way in which Web developers can decrease the load time of their Web sites by increasing the time to live of the Web site's cached components via increased modularisation which decreases the probability of a component changing.
 
 The remainder of the paper is organised as follows. In the following section we will discuss works related to our analysis and what our investigation contributes. In section \ref{methodology} we describe the characteristics we have chosen to analyse, and the metrics and tools we used to perform this study. Then we will explain the results we recorded in section \ref{results} and explain the practical implications of these results in section \ref{discussion}. Finally, we will conclude our paper and examine potential future work in the area of web workload characterisation in section \ref{conclusions}.
 
@@ -203,7 +206,7 @@ A trait we can see from figure \ref{fig:filesize} is that it is heavy-tailed. In
         \includegraphics[width=\textwidth]{images/usasktime}
         \caption{}\label{fig:usask}
     \end{subfigure}
-    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) conference dataset and (\ref{fig:usask}) dataset.) }\label{fig:diurnal}
+    \caption{Total file accesses grouped by hour of day for: (\ref{fig:calgary}) Calgary dataset, (\ref{fig:conference}) conference dataset and (\ref{fig:usask}) Saskatchewan dataset. }\label{fig:diurnal}
 \end{figure*}
 
 \subsection{Weekday vs Weekend} % (fold)
@@ -242,7 +245,7 @@ Our analysis showed that references are still highly concentrated. This can be u
 
 As stated in the study by Arlitt and Williamson \cite{invariants}, one time referencing is a concern. Depending on the server cache replacement policy, at least 30\% of the server's cache is being wasted. 
 
-From the results you can see that trend for file size distribution is the same for all data sets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increase while the file size remains relatively constant. This is useful as browsers are able to make multiple requests to the same Web server to request multiple different files in parallel.
+The results show that the trend for file size distribution is the same across all data sets, however Calgary's is an order of magnitude larger than Saskatchewan, with the conference site sitting in between them. As the conference site is 11 years newer than Calgary and Saskatchewan you would expect that it would be several times larger assuming it is following Moore's law \cite{williams05}. The possible reason for this is that the number of files that the browser must request has increased while the file size remains relatively constant. This is useful as browsers are able to make multiple requests to the same Web server to request multiple different files in parallel.
 
 We have clearly shown that for all the data sets there is a disparity between the number of requests made on a weekday and the number made on the weekend. As the weekend usage is often less than one third the number of requests as during the week the host can make use of the lowered demand to either run computation on some of the web hosts during the weekend or alternatively shut down some of the web hosts during the weekend to reduce running costs.
 
@@ -251,12 +254,13 @@ We observed no diurnal behaviour on the conference Web server. We believed this 
 Data gathered about file caching on HTTP servers is useful as it can be applied to real world situations. By using this information to better understand how caching works on these types of servers, caching can be optimised to save bandwidth and resources for both the server and the requesting client.
 
 \section{Conclusions and Future Work}\label{conclusions}
-This study has presented a workload analysis of three different server logs. The logs studied were from: The University of Calgary's Department of Computer Science; the campus wide server at The University of Saskatchewan and the server hosting the  academic conference Web site WWW2007.
+This study has presented a workload analysis of three different server logs. The logs studied were from: The University of Calgary's Department of Computer Science, the campus wide server at The University of Saskatchewan, and the server hosting the  academic conference Web site WWW2007.
 
-Using these logs we re-examined seven characteristics from Arlitt and Williamson's study \cite{keynote} and also identified two new characteristics to analyse. We have presented a comparison of these characteristics in Table \ref{tab:characteristics}. From our results we identified
+Using these logs we re-examined seven characteristics from Arlitt and Williamson's study \cite{keynote} and also identified two new characteristics to analyse. We have presented a comparison of these characteristics in Table \ref{tab:characteristics}. From our results we identified two opportunities for Web developers to improve their sites' ability to be cached. Our first opportunity arose due the increased percentage of requests for images in the conference Web server logs. This is an opportunity to improve caching as image files are modified less frequently than text-based files, and thus they can be cached for a longer period of time. We also observed that the file size distribution for the conference log was similar to the Calgary and Saskatchewan logs. However, the complexity of Web sites is increasing, and therefore by composing a Web site of multiple files that can be downloaded in parallel, if one file changes and the rest are cached only that individual file will need to be downloaded. 
 
 This study was not comprehensive and is meant as a basis from which further analysis can be carried out. Non-academic site is an area that would be of interest for continued study of the invariants.
-We also identified that due to the static nature of images it would be possible to cache them for an extended period of time without risking cache inconsistency.
 
 \printbibliography
+
+\includepdf[pages={1,2}]{DeclarationSection.pdf}
 \end{document}
